@@ -1,4 +1,4 @@
-package com.guardhub.ShiftRegistration;
+package com.guardhub.shift.registration;
 
 import jakarta.persistence.*;
 
@@ -8,17 +8,17 @@ public class ShiftRegistration {
 @JoinTable(name = "Shift_Guard")
  */
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long registrationId;
 
     private Long guardId;
     private Long shiftId;
 
-    @Enumerated (EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private RegistrationStatus regStatus;
 
-    public ShiftRegistration (Long registrationId, Long guardId, Long shiftId, RegistrationStatus regStatus) {
+    public ShiftRegistration(Long registrationId, Long guardId, Long shiftId, RegistrationStatus regStatus) {
         this.registrationId = registrationId;
         this.guardId = guardId;
         this.shiftId = shiftId;

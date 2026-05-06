@@ -1,8 +1,7 @@
-package com.guardhub.ShiftRegistration;
+package com.guardhub.shift.registration;
 
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +40,4 @@ public class ShiftRegController {
     public void deleteRegistration(@PathVariable Long registrationId) {
         shiftRegService.deleteRegistration(registrationId);
     }
-
-
 }

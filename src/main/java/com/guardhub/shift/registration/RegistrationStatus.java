@@ -1,4 +1,4 @@
-package com.guardhub.ShiftRegistration;
+package com.guardhub.shift.registration;
 
 public enum RegistrationStatus {
     PENDING,
