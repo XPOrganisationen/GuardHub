@@ -1,4 +1,4 @@
-package com.guardhub.ShiftRegistration;
+package com.guardhub.shift.registration;
 
 import org.springframework.stereotype.Service;
 

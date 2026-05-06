@@ -1,34 +1,37 @@
 package com.guardhub.shift;
 
-import java.time.LocalDateTime;
+import com.guardhub.shift.registration.ShiftRegistration;
+import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 public class Shift {
-    private final long shiftId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long shiftId;
+
     //    private final Client client;
     private LocalDateTime shiftStart;
     private LocalDateTime shiftEnd;
     //    private List<Certificate> requiredCertificates;
     private int requiredGuardAmount;
-    //    private List<Guard> assignedGuards;
+
+    @Enumerated(EnumType.STRING)
     private ShiftStatus shiftStatus;
+
     private String description;
+
+    @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ShiftRegistration> shiftRegistrations = new ArrayList<>();
 
     public enum ShiftStatus {AVAILABLE, ASSIGNED, COMPLETED, CANCELLED}
 
-    public Shift(long shiftId,/* Client client,*/ LocalDateTime shiftStart, LocalDateTime shiftEnd, /*List<Certificate> requiredCertificates,*/
-                 int requiredGuardAmount, /*List<Guard> assignedGuards,*/ShiftStatus shiftStatus, String description) {
-        this.shiftId = shiftId;
-//        this.client = client;
-        this.shiftStart = shiftStart;
-        this.shiftEnd = shiftEnd;
-//        this.requiredCertificates = requiredCertificates;
-        this.requiredGuardAmount = requiredGuardAmount;
-//        this.assignedGuards = assignedGuards;
-        this.shiftStatus = shiftStatus;
-        this.description = description;
-    }
+    public Shift() {}
 
-    public long getShiftId() {
+    public Long getShiftId() {
         return shiftId;
     }
 
@@ -72,11 +75,21 @@ public class Shift {
 //        return !requiredCertificates.isEmpty();
 //    }
 
-//    public List<Guard> getAssignedGuards() {
-//        return assignedGuards;
-//    }
+    public List<ShiftRegistration> getRegistrations() {
+        return shiftRegistrations;
+    }
 
     // TODO: Update shift status when assigning and unassigning guards
+    public void addRegistration(ShiftRegistration registration) {
+        shiftRegistrations.add(registration);
+//        registration.setShift(this);
+    }
+
+    public void removeRegistration(ShiftRegistration registration) {
+//        registrations.remove(registration);
+//        registration.setShift(null);
+    }
+
 //    public boolean assignGuard(Guard guard) {
 //        if (!canAssignGuard) return false;
 //        this.assignedGuards.add(guard);
