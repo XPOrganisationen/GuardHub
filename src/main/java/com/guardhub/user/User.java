@@ -1,6 +1,9 @@
 package com.guardhub.user;
 
+import com.guardhub.shift.registration.ShiftRegistration;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -22,9 +25,10 @@ public class User {
     private UserType userType;
 
     // TODO: @OneToMany relation with ShiftRegistration when we have the model.
-    // private List<ShiftRegistration> registrations;
+    private List<ShiftRegistration> registrations;
 
-    public User(){}
+    public User() {
+    }
 
     public User(Long id, String name, String password, String email, String phoneNumber, UserType userType) {
         this.id = id;
@@ -39,7 +43,7 @@ public class User {
         return userType == UserType.ADMIN;
     }
 
-    public boolean isGuard(){
+    public boolean isGuard() {
         return userType == UserType.GUARD;
     }
 
@@ -101,7 +105,7 @@ public class User {
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
 
@@ -110,8 +114,7 @@ public class User {
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return getClass().hashCode();
     }
 }

@@ -29,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping("/by-type/{userType}")
-    public List<User> getUsersByType(@PathVariable UserType userType){
+    public List<User> getUsersByType(@PathVariable UserType userType) {
         return userService.findAllByUserType(userType);
     }
 
@@ -44,14 +44,12 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id)
-    {
+    public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 
     @PostMapping("/login")
-    public User login(@RequestBody UserCredentials credentials)
-    {
+    public User login(@RequestBody UserCredentials credentials) {
         return userService.login(credentials.email(), credentials.password());
     }
     // TODO: Need to make /addUser /deleteUser and /getAllUsers an admin-only
