@@ -1,9 +1,5 @@
-package com.guardhub.controller;
+package com.guardhub.user;
 
-import com.guardhub.model.DTOs.UserCredentials;
-import com.guardhub.model.User;
-import com.guardhub.model.UserType;
-import com.guardhub.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

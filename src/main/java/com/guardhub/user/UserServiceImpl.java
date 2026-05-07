@@ -1,8 +1,5 @@
-package com.guardhub.service;
+package com.guardhub.user;
 
-import com.guardhub.model.User;
-import com.guardhub.model.UserType;
-import com.guardhub.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
