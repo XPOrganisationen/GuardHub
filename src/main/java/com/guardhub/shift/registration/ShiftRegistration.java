@@ -1,6 +1,7 @@
 package com.guardhub.shift.registration;
 
 import com.guardhub.shift.Shift;
+import com.guardhub.user.User;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,10 +14,9 @@ public class ShiftRegistration {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long registrationId;
 
-    private Long guardId; // TODO: Erstat med Guard
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "guard_id")
-//    private Guard guard;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "guard_id")
+    private User guard;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "shift_id")
@@ -25,9 +25,9 @@ public class ShiftRegistration {
     @Enumerated(EnumType.STRING)
     private RegistrationStatus regStatus;
 
-    public ShiftRegistration(Long registrationId, Long guardId, Shift shift, RegistrationStatus regStatus) {
+    public ShiftRegistration(Long registrationId, User guard, Shift shift, RegistrationStatus regStatus) {
         this.registrationId = registrationId;
-        this.guardId = guardId;
+        this.guard = guard;
         this.shift = shift;
         this.regStatus = regStatus;
     }
@@ -42,12 +42,12 @@ public class ShiftRegistration {
         this.registrationId = registrationId;
     }
 
-    public Long getGuardId() {
-        return guardId;
+    public User getGuard() {
+        return guard;
     }
 
-    public void setGuardId(Long guardId) {
-        this.guardId = guardId;
+    public void setGuard(User guard) {
+        this.guard = guard;
     }
 
     public Shift getShift() {
