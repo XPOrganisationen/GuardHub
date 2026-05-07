@@ -1,4 +1,4 @@
-package com.guardhub.model;
+package com.guardhub.user;
 
 public enum UserType {
     ADMIN,

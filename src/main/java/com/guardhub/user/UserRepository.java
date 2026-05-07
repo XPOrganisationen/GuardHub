@@ -1,7 +1,5 @@
-package com.guardhub.repository;
+package com.guardhub.user;
 
-import com.guardhub.model.User;
-import com.guardhub.model.UserType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

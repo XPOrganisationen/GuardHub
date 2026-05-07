@@ -1,8 +1,5 @@
-package com.guardhub.service;
+package com.guardhub.user;
 
-import com.guardhub.model.User;
-import com.guardhub.model.UserType;
-import com.guardhub.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,8 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
-        if (userRepository.findUserByEmail(user.getEmail()).isPresent())
-        {
+        if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already exist: " + user.getEmail());
         }
 
@@ -55,8 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        if (!userRepository.existsById(user.getId()))
-        {
+        if (!userRepository.existsById(user.getId())) {
             throw new IllegalArgumentException("No user found with id: " + user.getId());
         }
 
@@ -66,8 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id))
-        {
+        if (!userRepository.existsById(id)) {
             throw new IllegalArgumentException("No user found with id: " + id);
         }
         userRepository.deleteById(id);
@@ -79,8 +73,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Wrong email or password"));
 
         // TODO: Password check with crypt needed to be implemented
-        if (!user.getPassword().equals(password))
-        {
+        if (!user.getPassword().equals(password)) {
             throw new IllegalArgumentException("Wrong email or password");
         }
 

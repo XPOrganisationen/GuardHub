@@ -22,7 +22,7 @@ public class ShiftRegController {
     }
 
     @GetMapping("{registrationId}")
-    public Optional<ShiftRegistration> getAllRegById(@PathVariable Long registrationId) {
+    public Optional<ShiftRegistration> getAllRegistrationsById(@PathVariable Long registrationId) {
         return shiftRegService.findByRegId(registrationId);
     }
 

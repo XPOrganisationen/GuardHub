@@ -1,7 +1,4 @@
-package com.guardhub.service;
-
-import com.guardhub.model.User;
-import com.guardhub.model.UserType;
+package com.guardhub.user;
 
 import java.util.List;
 
