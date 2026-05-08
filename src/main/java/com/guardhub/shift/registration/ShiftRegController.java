@@ -12,7 +12,7 @@ public class ShiftRegController {
 
     private final ShiftRegService shiftRegService;
 
-    public ShiftRegController (ShiftRegService shiftRegService) {
+    public ShiftRegController(ShiftRegService shiftRegService) {
         this.shiftRegService = shiftRegService;
     }
 

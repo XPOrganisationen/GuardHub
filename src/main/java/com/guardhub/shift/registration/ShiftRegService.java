@@ -12,7 +12,7 @@ public class ShiftRegService {
 
     private final ShiftRegRepo shiftRegRepo;
 
-    public ShiftRegService (ShiftRegRepo shiftRegRepo) {
+    public ShiftRegService(ShiftRegRepo shiftRegRepo) {
         this.shiftRegRepo = shiftRegRepo;
     }
 

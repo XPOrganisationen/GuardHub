@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface ShiftRegRepo extends JpaRepository <ShiftRegistration, Long> {
+public interface ShiftRegRepo extends JpaRepository<ShiftRegistration, Long> {
     Optional<ShiftRegistration> findByGuardAndShift(User guard, Shift shift);
 
     List<ShiftRegistration> findByShiftAndRegStatus(Shift shift, RegistrationStatus regStatus);
