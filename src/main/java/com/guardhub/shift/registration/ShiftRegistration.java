@@ -5,10 +5,8 @@ import com.guardhub.user.Guard;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "shift_registrations")
 public class ShiftRegistration {
-/*@ManyToMany
-@JoinTable(name = "Shift_Guard")
- */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,16 +21,21 @@ public class ShiftRegistration {
     private Shift shift;
 
     @Enumerated(EnumType.STRING)
-    private RegistrationStatus regStatus;
-
-    public ShiftRegistration(Long registrationId, Guard guard, Shift shift, RegistrationStatus regStatus) {
-        this.registrationId = registrationId;
-        this.guard = guard;
-        this.shift = shift;
-        this.regStatus = regStatus;
-    }
+    private RegistrationStatus registrationStatus;
 
     public ShiftRegistration() {}
+
+    public ShiftRegistration(Guard guard, Shift shift) {
+        this.guard = guard;
+        this.shift = shift;
+        this.registrationStatus = RegistrationStatus.PENDING;
+    }
+
+    public ShiftRegistration(Long registrationId, Guard guard, Shift shift, RegistrationStatus regStatus) {
+        this(guard, shift);
+        this.registrationId = registrationId;
+        this.registrationStatus = regStatus;
+    }
 
     public Long getRegistrationId() {
         return registrationId;
@@ -58,11 +61,33 @@ public class ShiftRegistration {
         this.shift = shift;
     }
 
-    public RegistrationStatus getRegStatus() {
-        return regStatus;
+    public RegistrationStatus getRegistrationStatus() {
+        return registrationStatus;
     }
 
-    public void setRegStatus(RegistrationStatus regStatus) {
-        this.regStatus = regStatus;
+    public void setRegistrationStatus(RegistrationStatus registrationStatus) {
+        this.registrationStatus = registrationStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "ShiftRegistration{" +
+                "registrationId=" + registrationId +
+                ", guard=" + (guard != null ? guard.getName() : "null") +
+                ", shift=" + (shift != null ? shift.getShiftId() : "null") +
+                ", registrationStatus=" + registrationStatus +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ShiftRegistration that)) return false;
+        return registrationId != null && registrationId.equals(that.registrationId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
