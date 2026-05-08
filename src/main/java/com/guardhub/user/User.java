@@ -24,7 +24,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    // TODO: @OneToMany relation with ShiftRegistration when we have the model.
+    @OneToMany(mappedBy = "guard", cascade = CascadeType.ALL)
     private List<ShiftRegistration> registrations;
 
     public User() {
