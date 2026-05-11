@@ -24,7 +24,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
-    @OneToMany
+    @OneToMany(mappedBy = "guard", cascade = CascadeType.ALL)
     private List<ShiftRegistration> registrations;
 
     public User() {

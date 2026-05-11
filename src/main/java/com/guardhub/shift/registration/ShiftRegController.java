@@ -1,5 +1,8 @@
 package com.guardhub.shift.registration;
 
+import com.guardhub.shift.Shift;
+import com.guardhub.user.User;
+import com.guardhub.user.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,9 +14,11 @@ import java.util.Optional;
 public class ShiftRegController {
 
     private final ShiftRegService shiftRegService;
+    private final UserService userService;
 
-    public ShiftRegController (ShiftRegService shiftRegService) {
+    public ShiftRegController (ShiftRegService shiftRegService, UserService userService) {
         this.shiftRegService = shiftRegService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -21,9 +26,14 @@ public class ShiftRegController {
         return shiftRegService.findAllRegistrations();
     }
 
-    @GetMapping("{registrationId}")
+    @GetMapping("/{registrationId}")
     public Optional<ShiftRegistration> getAllRegistrationsById(@PathVariable Long registrationId) {
         return shiftRegService.findByRegId(registrationId);
+    }
+
+    @GetMapping("/pending")
+    public List<ShiftRegistration> getPendingRegistrationsByShift(@RequestBody Shift shift) {
+        return shiftRegService.getPendingRegistrationsByShift(shift);
     }
 
     @PostMapping
@@ -31,12 +41,36 @@ public class ShiftRegController {
         return shiftRegService.addRegistration(shiftRegistration);
     }
 
+    @PostMapping("/{registrationId}/approve")
+    public ShiftRegistration approveRegistration(@PathVariable Long registrationId, @RequestParam Long adminId) {
+        User admin = userService.findById(adminId);
+        return shiftRegService.approveRegistration(registrationId, admin);
+    }
+
+    @PostMapping("/{registrationId}/reject")
+    public ShiftRegistration rejectRegistration(@PathVariable Long registrationId, @RequestParam Long adminId) {
+        User admin = userService.findById(adminId);
+        return shiftRegService.rejectRegistration(registrationId, admin);
+    }
+
+    @PostMapping("/{registrationId}/cancel")
+    public ShiftRegistration cancelRegistration(@PathVariable Long registrationId, @RequestParam Long guardId) {
+        User guard = userService.findById(guardId);
+        return shiftRegService.cancelRegistration(registrationId, guard);
+    }
+
     @PutMapping
     public ShiftRegistration updateRegistration(@RequestBody ShiftRegistration shiftRegistration) {
         return shiftRegService.updateRegistration(shiftRegistration);
     }
 
-    @DeleteMapping("{registrationId}")
+    @DeleteMapping("/{registrationId}/remove")
+    public ShiftRegistration removeGuardFromShift(@PathVariable Long registrationId, @RequestParam Long adminId) {
+        User admin = userService.findById(adminId);
+        return shiftRegService.removeGuardFromShift(registrationId, admin);
+    }
+
+    @DeleteMapping("/{registrationId}")
     public void deleteRegistration(@PathVariable Long registrationId) {
         shiftRegService.deleteRegistration(registrationId);
     }
