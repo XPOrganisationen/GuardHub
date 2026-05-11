@@ -10,41 +10,41 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ShiftRegistrationService {
+public class ShiftRegService {
 
-    private final ShiftRegistrationRepository shiftRegistrationRepository;
+    private final ShiftRegRepo shiftRegRepo;
 
-    public ShiftRegistrationService(ShiftRegistrationRepository shiftRegistrationRepository) {
-        this.shiftRegistrationRepository = shiftRegistrationRepository;
+    public ShiftRegService(ShiftRegRepo shiftRegRepo) {
+        this.shiftRegRepo = shiftRegRepo;
     }
 
     public List<ShiftRegistration> findAllRegistrations() {
-        return shiftRegistrationRepository.findAll();
+        return shiftRegRepo.findAll();
     }
 
     public Optional<ShiftRegistration> findByRegistrationId(Long registrationId) {
-        return shiftRegistrationRepository.findById(registrationId);
+        return shiftRegRepo.findById(registrationId);
     }
 
     public ShiftRegistration getByRegistrationId(Long registrationId) {
-        return shiftRegistrationRepository.findById(registrationId)
+        return shiftRegRepo.findById(registrationId)
                 .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
     }
 
     public List<ShiftRegistration> findByGuard(Guard guard) {
-        return shiftRegistrationRepository.findByGuard(guard);
+        return shiftRegRepo.findByGuard(guard);
     }
 
     public List<ShiftRegistration> findByRegistrationStatus(RegistrationStatus registrationStatus) {
-        return shiftRegistrationRepository.findByRegistrationStatus(registrationStatus);
+        return shiftRegRepo.findByRegistrationStatus(registrationStatus);
     }
 
     public long getApprovedGuardCountForShift(Shift shift) {
-        return shiftRegistrationRepository.countApprovedRegistrationsByShift(shift);
+        return shiftRegRepo.countApprovedRegistrationsByShift(shift);
     }
 
     public List<ShiftRegistration> getActiveRegistrationsForGuard(Guard guard) {
-        return shiftRegistrationRepository.findActiveRegistrationsByGuard(guard);
+        return shiftRegRepo.findActiveRegistrationsByGuard(guard);
     }
 
     public ShiftRegistration registerGuardForShift(Guard guard, Shift shift) {
@@ -56,13 +56,13 @@ public class ShiftRegistrationService {
             throw new IllegalArgumentException("Cannot register for a shift in the past");
         }
 
-        if (shiftRegistrationRepository.findByGuardAndShift(guard, shift).isPresent()) {
+        if (shiftRegRepo.findByGuardAndShift(guard, shift).isPresent()) {
             throw new IllegalArgumentException("Guard is already registered for this shift");
         }
 
         // Create and save new registration
         ShiftRegistration shiftRegistration = new ShiftRegistration(guard, shift);
-        ShiftRegistration savedShiftRegistration = shiftRegistrationRepository.save(shiftRegistration);
+        ShiftRegistration savedShiftRegistration = shiftRegRepo.save(shiftRegistration);
 
         // Add to guard's registrations
         guard.addShiftRegistration(savedShiftRegistration);
@@ -71,15 +71,15 @@ public class ShiftRegistrationService {
     }
 
     public ShiftRegistration updateRegistration(ShiftRegistration shiftRegistration) {
-        return shiftRegistrationRepository.save(shiftRegistration);
+        return shiftRegRepo.save(shiftRegistration);
     }
 
     public void deleteRegistration(Long registrationId) {
-        shiftRegistrationRepository.deleteById(registrationId);
+        shiftRegRepo.deleteById(registrationId);
     }
 
     public List<ShiftRegistration> getPendingRegistrationsByShift(Shift shift) {
-        return shiftRegistrationRepository.findByShiftAndRegistrationStatus(shift, RegistrationStatus.PENDING);
+        return shiftRegRepo.findByShiftAndRegistrationStatus(shift, RegistrationStatus.PENDING);
     }
 
     // Admin can approve a pending registration made by a guard.
@@ -91,7 +91,7 @@ public class ShiftRegistrationService {
         }
 
         registration.setRegistrationStatus(RegistrationStatus.APPROVED);
-        return shiftRegistrationRepository.save(registration);
+        return shiftRegRepo.save(registration);
     }
 
 
@@ -104,7 +104,7 @@ public class ShiftRegistrationService {
         }
 
         registration.setRegistrationStatus(RegistrationStatus.REJECTED);
-        return shiftRegistrationRepository.save(registration);
+        return shiftRegRepo.save(registration);
     }
 
     // Gives an Admin the ability to forcefully remove a guard from a shift within the system, if it has been mutually agreed.
@@ -114,7 +114,7 @@ public class ShiftRegistrationService {
         registration.setRegistrationStatus(RegistrationStatus.CANCELLED);
 
         //TODO: be able to update shift status so when the amount of guards are < than the required for the shift, its status is set to available.
-        return shiftRegistrationRepository.save(registration);
+        return shiftRegRepo.save(registration);
     }
 
     // A Guard has the ability to remove himself from a shift (Only if the registration is pending).
@@ -130,6 +130,6 @@ public class ShiftRegistrationService {
         }
 
         registration.setRegistrationStatus(RegistrationStatus.CANCELLED);
-        return shiftRegistrationRepository.save(registration);
+        return shiftRegRepo.save(registration);
     }
 }
