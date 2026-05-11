@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="client-style.css">
+    <title>Klient side</title>
+</head>
+
+<body>
+<header id="index-header">
+    <h2>GuardHub</h2>
+    <a href="index.html">Log out</a>
+</header>
+
+<h1 class="text-center">Klienter</h1>
+
+<form id="clientForm">
+    <input type="hidden" id="id" name="id">
+    <input type="text" id="name" name="name" placeholder="Indtast navn på klient" required>
+    <input type="text" id="email" name="email" placeholder="Indtast e-mail for klient" required>
+    <input type="text" id="pNumber" name="pNumber" placeholder="Indtast telefonnummer for klient" required>
+
+
+    <input type="text" id="address" name="address" placeholder="Indtast adresse for klient" required>
+    <button type="button" id="cancelEditBtn" class="btn btn-secondary hidden">Cancel Edit</button>
+    <button type="submit" class="btn btn-primary">Tilføj Klient</button>
+</form>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Navn</th>
+        <th scope="col">E-mail</th>
+        <th scope="col">Telefonnummer</th>
+        <th scope="col">By</th>
+        <th scope="col">Adresse</th>
+    </tr>
+    </thead>
+    <tbody id="clientTableBody">
+    </tbody>
+</table>
+
+<script type="module" src="client.js"></script>
+</body>
+
+</html>

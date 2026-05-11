@@ -10,6 +10,8 @@ public interface ClientService {
     public List<Client> findAllWithName(String clientName);
     public List<Client> findAllWithCity(City city);
 
+    public List<City> findAllCities();
+
     public Client findClientByClientName(String clientName);
     public Client findById(Long clientId);
     public Client addClient(Client client);

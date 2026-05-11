@@ -44,6 +44,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public List<City> findAllCities() {
+        return clientRepository.findAllCities();
+    }
+
+    @Override
     public Client addClient(Client client) {
         return clientRepository.save(client);
     }

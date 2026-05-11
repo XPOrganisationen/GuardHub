@@ -15,7 +15,10 @@ public class Client {
     private String clientName;
     private String clientEmail;
     private String clientPhoneNumber;
+
+    @Enumerated(EnumType.STRING)
     private City city;
+
     private String clientAddress;
 
     public Client() {
