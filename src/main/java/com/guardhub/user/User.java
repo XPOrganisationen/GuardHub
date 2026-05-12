@@ -1,14 +1,12 @@
 package com.guardhub.user;
 
-import com.guardhub.shift.registration.ShiftRegistration;
 import jakarta.persistence.*;
-
-import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
-
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -21,30 +19,21 @@ public class User {
 
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
+    public User() {}
 
-    @OneToMany(mappedBy = "guard", cascade = CascadeType.ALL)
-    private List<ShiftRegistration> registrations;
-
-    public User() {
+    public User(String name, String password, String email, String phoneNumber) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
-    public User(Long userId, String name, String password, String email, String phoneNumber, UserType userType) {
+    public User(Long userId, String name, String password, String email, String phoneNumber) {
         this.userId = userId;
         this.name = name;
         this.password = password;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.userType = userType;
-    }
-
-    public boolean isAdmin() {
-        return userType == UserType.ADMIN;
-    }
-
-    public boolean isGuard() {
-        return userType == UserType.GUARD;
     }
 
     public Long getUserId() {
@@ -87,30 +76,21 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
     @Override
     public String toString() {
-        return "User{" + "id=[" + userId + "], " +
-                "name=[" + name + '\'' + "], " +
-                "email=[" + email + '\'' + "], " +
-                "userType=[" + userType + "]" +
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
-
-        User user = (User) o;
-        return userId != null && userId.equals(user.userId);
+        if (!(o instanceof User user)) return false;
+        return id != null && id.equals(user.id);
     }
 
     @Override

@@ -2,23 +2,19 @@ package com.guardhub.shift.registration;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.guardhub.shift.Shift;
-import com.guardhub.user.User;
+import com.guardhub.user.Guard;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "shift_registrations")
 public class ShiftRegistration {
-/*@ManyToMany
-@JoinTable(name = "Shift_Guard")
- */
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long registrationId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "guard_id")
-    private User guard;
+    private Guard guard;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonBackReference
@@ -37,6 +33,12 @@ public class ShiftRegistration {
 
     public ShiftRegistration() {}
 
+    public ShiftRegistration(Long registrationId, Guard guard, Shift shift, RegistrationStatus regStatus) {
+        this(guard, shift);
+        this.registrationId = registrationId;
+        this.registrationStatus = regStatus;
+    }
+
     public Long getRegistrationId() {
         return registrationId;
     }
@@ -45,11 +47,11 @@ public class ShiftRegistration {
         this.registrationId = registrationId;
     }
 
-    public User getGuard() {
+    public Guard getGuard() {
         return guard;
     }
 
-    public void setGuard(User guard) {
+    public void setGuard(Guard guard) {
         this.guard = guard;
     }
 
@@ -67,5 +69,27 @@ public class ShiftRegistration {
 
     public void setRegistrationStatus(RegistrationStatus regStatus) {
         this.registrationStatus = regStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "ShiftRegistration{" +
+                "registrationId=" + registrationId +
+                ", guard=" + (guard != null ? guard.getName() : "null") +
+                ", shift=" + (shift != null ? shift.getShiftId() : "null") +
+                ", registrationStatus=" + registrationStatus +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ShiftRegistration that)) return false;
+        return registrationId != null && registrationId.equals(that.registrationId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

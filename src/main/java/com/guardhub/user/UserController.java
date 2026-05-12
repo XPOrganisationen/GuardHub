@@ -18,6 +18,16 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping("/admins")
+    public List<Admin> getAllAdmins() {
+        return userService.findAllAdmins();
+    }
+
+    @GetMapping("/guards")
+    public List<Guard> getAllGuards() {
+        return userService.findAllGuards();
+    }
+
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         return userService.findById(id);
@@ -28,14 +38,14 @@ public class UserController {
         return userService.findAllByName(name);
     }
 
-    @GetMapping("/by-type/{userType}")
-    public List<User> getUsersByType(@PathVariable UserType userType) {
-        return userService.findAllByUserType(userType);
+    @PostMapping("/admin")
+    public Admin addAdmin(@RequestBody Admin admin) {
+        return userService.addAdmin(admin);
     }
 
-    @PostMapping
-    public User addUser(@RequestBody User user) {
-        return userService.addUser(user);
+    @PostMapping("/guard")
+    public Guard addGuard(@RequestBody Guard guard) {
+        return userService.addGuard(guard);
     }
 
     @PutMapping
@@ -56,4 +66,13 @@ public class UserController {
     // TODO: After logging in the User needs to be redirected depending on admin/guard
     // TODO: Need to make a DTO without a password so it doesn't send it back to frontend. (Need help with Crypt).(Maybe a UserResponse DTO with everything but password so the login returns that instead?)
 
+
+    // Et eksempel på hvordan nogle endpoints kan kræve at brugeren er en Admin
+    @GetMapping("/admin-only")
+    public String exampleAdminOnlyEndpoint(@RequestParam Long userId) {
+        User user = userService.findById(userId);
+        if (!(user instanceof Admin)) throw new IllegalArgumentException("Access denied: Admin privileges required");
+
+        return "Admin access granted!";
+    }
 }

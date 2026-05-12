@@ -5,8 +5,11 @@ import com.guardhub.shift.Shift;
 import com.guardhub.shift.ShiftRepository;
 import com.guardhub.user.User;
 import com.guardhub.user.UserRepository;
+import com.guardhub.user.Admin;
+import com.guardhub.user.Guard;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +31,27 @@ public class ShiftRegistrationService {
 
     public ShiftRegistration findByRegId(Long registrationId) {
         return shiftRegistrationRepository.findById(registrationId).orElseThrow(() -> new EntityDoesNotExistException("No registration with ID " + registrationId + " exists"));
+    }
+
+    public ShiftRegistration getByRegistrationId(Long registrationId) {
+        return shiftRegRepo.findById(registrationId)
+                .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
+    }
+
+    public List<ShiftRegistration> findByGuard(Guard guard) {
+        return shiftRegRepo.findByGuard(guard);
+    }
+
+    public List<ShiftRegistration> findByRegistrationStatus(RegistrationStatus registrationStatus) {
+        return shiftRegRepo.findByRegistrationStatus(registrationStatus);
+    }
+
+    public long getApprovedGuardCountForShift(Shift shift) {
+        return shiftRegRepo.countApprovedRegistrationsByShift(shift);
+    }
+
+    public List<ShiftRegistration> getActiveRegistrationsForGuard(Guard guard) {
+        return shiftRegRepo.findActiveRegistrationsByGuard(guard);
     }
 
     public ShiftRegistration addRegistration(ShiftRegistration shiftRegistration) {
@@ -68,45 +92,40 @@ public class ShiftRegistrationService {
     }
 
         // Admin can approve a pending registration made by a guard.
-    public ShiftRegistration approveRegistration(Long registrationId, User admin) {
-        if (!admin.isAdmin()) {
-            throw new IllegalArgumentException("Only admins can approve shift registrations");
-        }
-
+    public ShiftRegistration approveRegistration(Long registrationId, Admin admin) {
         ShiftRegistration registration = shiftRegistrationRepository.findById(registrationId)
                 .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
+
+        if (registration.getRegistrationStatus() != RegistrationStatus.PENDING) {
+            throw new IllegalArgumentException("Only pending registrations can be approved");
+        }
 
         registration.setRegistrationStatus(RegistrationStatus.APPROVED);
         return shiftRegistrationRepository.save(registration);
     }
 
         // Admin can reject a pending registration made by a guard.
-    public ShiftRegistration rejectRegistration(Long registrationId, User admin) {
-        if (!admin.isAdmin()) {
-            throw new IllegalArgumentException("Only admins can reject shift registrations");
-        }
-
+    public ShiftRegistration rejectRegistration(Long registrationId, Admin admin) {
         ShiftRegistration registration = shiftRegistrationRepository.findById(registrationId)
                 .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
+
+        if (registration.getRegistrationStatus() != RegistrationStatus.PENDING) {
+            throw new IllegalArgumentException("Only pending registrations can be rejected");
+        }
 
         registration.setRegistrationStatus(RegistrationStatus.REJECTED);
         return shiftRegistrationRepository.save(registration);
     }
 
         // Gives an Admin the ability to forcefully remove a guard from a shift within the system, if it has been mutually agreed.
-    public ShiftRegistration removeGuardFromShift(Long registrationId, User admin) {
-        if (!admin.isAdmin()) {
-            throw new IllegalArgumentException("Only admins can remove guards from shifts");
-        }
-
+    public ShiftRegistration removeGuardFromShift(Long registrationId, Admin admin) {
         ShiftRegistration registration = shiftRegistrationRepository.findById(registrationId)
                 .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
 
         registration.setRegistrationStatus(RegistrationStatus.CANCELED);
-        shiftRegistrationRepository.save(registration);
-
-        //TODO: be able to update shift status so when the amount of guards are < than the required for the shift, its status is set to available.
         return shiftRegistrationRepository.save(registration);
+
+        //TODO: be able to update shift status so when the amount of guards are < than the required for the shift, its status is set to available
     }
 
     // A Guard has the ability to remove himself from a shift (Only if the registration is pending).

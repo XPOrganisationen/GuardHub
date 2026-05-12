@@ -7,21 +7,21 @@ public interface UserService {
 
     List<User> findAllByName(String name);
 
-    List<User> findAllByUserType(UserType userType);
+    List<Admin> findAllAdmins();
+
+    List<Guard> findAllGuards();
 
     User findById(Long id);
 
     User findByEmail(String email);
 
-    User addUser(User user);
+    Admin addAdmin(Admin admin);
+
+    Guard addGuard(Guard guard);
 
     User updateUser(User user);
 
     void deleteUser(Long id);
 
     User login(String email, String password);
-
-    boolean isAdmin(User user);
-
-    boolean isGuard(User user);
 }

@@ -1,10 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardHub - Administration</title>
 
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/administration.css">
+</head>
+
+<body class="administration-page">
+
+<header class="topbar">
+    <div class="topbar-brand">
+    <img
+        src="images/GuardhubLogo.png"
+        alt="GuardHub Logo"
+        class="topbar-logo"
+        >
+    </div>
+
+    <h1>Administration</h1>
+
+    <button id="logoutButton" class="logout-button">
+        Log out
+    </button>
+</header>
+
+<main class="administration-main">
+    <section class="administration-card">
+
+        <h2>Admin Options</h2>
+
+        <nav class="admin-menu">
+            <a href="users.html" class="admin-menu-button">
+                Guards
+            </a>
+            <a href="#" class="admin-menu-button disabled-link"> <!-- //shifts.html -->
+                Shifts
+            </a>
+            <a href="#" class="admin-menu-button disabled-link"> <!-- //clients.html -->
+                Clients
+            </a>
+            <a href="#" class="admin-menu-button disabled-link"> <!-- reservations.html (?) -->
+                Reservations
+            </a>
+        </nav>
+    </section>
+</main>
+
+<script src="js/administration.js"></script>
 </body>
 </html>
