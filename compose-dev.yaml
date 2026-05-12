@@ -1,6 +1,6 @@
 services:
   db:
-    container_name: XPDB
+    container_name: ghdb
     image: "mysql:9.6.0"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}

@@ -51,8 +51,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(User user) {
-        if (!userRepository.existsById(user.getId())) {
-            throw new IllegalArgumentException("No user found with id: " + user.getId());
+        if (!userRepository.existsById(user.getUserId())) {
+            throw new IllegalArgumentException("No user found with id: " + user.getUserId());
         }
 
         // TODO: Handle password update in seperate method to avoid accidental null password issues etc.

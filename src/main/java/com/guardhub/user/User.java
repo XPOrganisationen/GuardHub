@@ -11,7 +11,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     private String name;
     private String password; // NOTE: NEEDS HASHING
@@ -30,8 +30,8 @@ public class User {
     public User() {
     }
 
-    public User(Long id, String name, String password, String email, String phoneNumber, UserType userType) {
-        this.id = id;
+    public User(Long userId, String name, String password, String email, String phoneNumber, UserType userType) {
+        this.userId = userId;
         this.name = name;
         this.password = password;
         this.email = email;
@@ -47,12 +47,12 @@ public class User {
         return userType == UserType.GUARD;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long userId) {
-        this.id = userId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -97,7 +97,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "id=[" + id + "], " +
+        return "User{" + "id=[" + userId + "], " +
                 "name=[" + name + '\'' + "], " +
                 "email=[" + email + '\'' + "], " +
                 "userType=[" + userType + "]" +
@@ -110,7 +110,7 @@ public class User {
         if (!(o instanceof User)) return false;
 
         User user = (User) o;
-        return id != null && id.equals(user.id);
+        return userId != null && userId.equals(user.userId);
     }
 
     @Override

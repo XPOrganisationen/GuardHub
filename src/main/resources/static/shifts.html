@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="shifts.js" type="module"></script>
+    <link rel="stylesheet" href="shifts.css">
+</head>
+<body>
+    <main id="shift-main">
+        <div id="switch-calendar-view-row">
+            <button id="all_shifts" class="calendar-view-button calendar-view-button-active">All shifts</button>
+            <button id="my_shifts" class="calendar-view-button">My shifts</button>
+        </div>
+
+        <div id="calendar-navigation-row">
+            <button id="calendar-week-navigation-btn-left" class="calendar-week-navigation-btn">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <div id="shift-schedule-container">
+
+            </div>
+            <button id="calendar-week-navigation-btn-right" class="calendar-week-navigation-btn">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </main>
+</body>
+</html>
