@@ -2,9 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardHub - Users</title>
 
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/users.css">
+</head>
+
+<body class="users-page">
+
+<header class="topbar">
+    <div class="topbar-brand">
+        <img
+            src="images/GuardhubLogo.png"
+            alt="GuardHub logo"
+            class="topbar-logo">
+    </div>
+
+    <h1>Guard Management</h1>
+
+    <button id="logoutButton" class="logout-button">
+        Log out
+    </button>
+</header>
+
+<main class="users-main">
+
+    <section class="users-card">
+        <div class="users-header">
+            <div>
+                <h2>Guards</h2>
+                <p>View, search and manage guards</p>
+            </div>
+
+            <button id="openAddUserButton" class="primary-button">
+            New guard
+            </button>
+        </div>
+
+        <div class="users-toolbar">
+            <label for="searchInput">Search</label>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by name..."
+            >
+        </div>
+
+        <table class="users-table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>E-mail</th>
+                <th>Phone number</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody id="usersTableBody">
+            </tbody>
+        </table>
+
+        <p id="userMessage" class="user-message"></p>
+    </section>
+</main>
+
+<section id="addUserModal" class="modal hidden">
+    <div class="modal-card">
+        <h2>Guard Form</h2>
+        <form id="addUserForm">
+
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name" type="text" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input id="email" type="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phoneNumber">Phone number</label>
+                <input id="phoneNumber" type="text" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Temporary password</label>
+                <input id="password" type="password" required>
+            </div>
+
+            <p id="formMessage" class="form-message"></p>
+
+            <div class="modal-actions">
+                <button type="button" id="cancelAddUserButton" class="secondary-button">
+                    Cancel
+                </button>
+
+                <button type="submit" class="primary-button">
+                    Add Guard
+                </button>
+            </div>
+
+        </form>
+    </div>
+</section>
+
+<script src="js/users.js"></script>
 </body>
 </html>

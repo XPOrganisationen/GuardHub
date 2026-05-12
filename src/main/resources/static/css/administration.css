@@ -1,0 +1,57 @@
+.administration-main {
+    min-height: calc(100vh - 70px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px 20px;
+}
+
+.administration-card{
+    width: 100%;
+    max-width: 360px;
+
+    background-color: white;
+    padding: 36px;
+    border-radius: 14px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+
+    text-align: center;
+}
+
+.administration-card h2 {
+    margin-top: 0;
+    font-size: 28px;
+}
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+.admin-menu-button{
+    display: block;
+    width: 100%;
+    padding: 14px;
+
+    background-color: #2563eb;
+    color: white;
+
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.admin-menu-button:hover{
+    opacity: 0.9;
+}
+
+.disabled-link{
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
