@@ -1,6 +1,8 @@
 package com.guardhub.shift.registration;
 
 import com.guardhub.shift.Shift;
+import com.guardhub.user.Admin;
+import com.guardhub.user.Guard;
 import com.guardhub.user.User;
 import com.guardhub.user.UserService;
 import org.springframework.http.ResponseEntity;
@@ -58,19 +60,19 @@ public class ShiftRegistrationController {
 
     @PostMapping("/{registrationId}/approve")
     public ResponseEntity<ShiftRegistration> approveRegistration(@PathVariable Long registrationId, @RequestParam Long adminId) {
-        User admin = userService.findById(adminId);
+        Admin admin = (Admin) userService.findById(adminId);
         return ResponseEntity.ok(shiftRegistrationService.approveRegistration(registrationId, admin));
     }
 
     @PostMapping("/{registrationId}/reject")
     public ResponseEntity<ShiftRegistration> rejectRegistration(@PathVariable Long registrationId, @RequestParam Long adminId) {
-        User admin = userService.findById(adminId);
+        Admin admin = (Admin) userService.findById(adminId);
         return ResponseEntity.ok(shiftRegistrationService.rejectRegistration(registrationId, admin));
     }
 
     @PostMapping("/{registrationId}/cancel")
     public ResponseEntity<ShiftRegistration> cancelRegistration(@PathVariable Long registrationId, @RequestParam Long guardId) {
-        User guard = userService.findById(guardId);
+        Guard guard = (Guard) userService.findById(guardId);
         return ResponseEntity.ok(shiftRegistrationService.cancelRegistration(registrationId, guard));
     }
 
@@ -82,7 +84,7 @@ public class ShiftRegistrationController {
 
     @DeleteMapping("/{registrationId}/remove")
     public ResponseEntity<ShiftRegistration> removeGuardFromShift(@PathVariable Long registrationId, @RequestParam Long adminId) {
-        User admin = userService.findById(adminId);
+        Admin admin = (Admin) userService.findById(adminId);
         shiftRegistrationService.removeGuardFromShift(registrationId, admin);
         return ResponseEntity.noContent().build();
     }

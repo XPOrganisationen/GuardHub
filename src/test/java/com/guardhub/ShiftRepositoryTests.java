@@ -10,9 +10,9 @@ import com.guardhub.shift.ShiftRepository;
 import com.guardhub.shift.registration.RegistrationStatus;
 import com.guardhub.shift.registration.ShiftRegistration;
 import com.guardhub.shift.registration.ShiftRegistrationRepository;
+import com.guardhub.user.Guard;
 import com.guardhub.user.User;
 import com.guardhub.user.UserRepository;
-import com.guardhub.user.UserType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,8 +55,8 @@ public class ShiftRepositoryTests {
         Client client = new Client("ExampleRoad, ExampleCity, ExampleCountry", city, "a@example.com", null, "ExampleCompany");
         clientRepository.save(client);
 
-        User guard1 = new User(null, "Jorn", "abcdefg", "jorn@example.com", "12345678", UserType.GUARD);
-        User guard2 = new User(null, "Jorno", "gefbc", "jorno@example.com", "87654321", UserType.GUARD);
+        Guard guard1 = new Guard(null, "Jorn", "abcdefg", "jorn@example.com", "12345678");
+        Guard guard2 = new Guard(null, "Jorno", "gefbc", "jorno@example.com", "87654321");
         savedGuards = userRepository.saveAll(List.of(guard1, guard2));
 
         Shift shift1 = new Shift(null, "example title", client, "example description", 4, LocalDateTime.of(2026, 5, 14, 8, 0, 0), LocalDateTime.of(2026, 5, 14, 16, 0, 0));

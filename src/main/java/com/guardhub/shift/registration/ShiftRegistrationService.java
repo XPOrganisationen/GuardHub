@@ -9,7 +9,6 @@ import com.guardhub.user.Admin;
 import com.guardhub.user.Guard;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -34,24 +33,24 @@ public class ShiftRegistrationService {
     }
 
     public ShiftRegistration getByRegistrationId(Long registrationId) {
-        return shiftRegRepo.findById(registrationId)
+        return shiftRegistrationRepository.findById(registrationId)
                 .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
     }
 
     public List<ShiftRegistration> findByGuard(Guard guard) {
-        return shiftRegRepo.findByGuard(guard);
+        return shiftRegistrationRepository.findAllByGuard(guard);
     }
 
     public List<ShiftRegistration> findByRegistrationStatus(RegistrationStatus registrationStatus) {
-        return shiftRegRepo.findByRegistrationStatus(registrationStatus);
+        return shiftRegistrationRepository.findByRegistrationStatus(registrationStatus);
     }
 
     public long getApprovedGuardCountForShift(Shift shift) {
-        return shiftRegRepo.countApprovedRegistrationsByShift(shift);
+        return shiftRegistrationRepository.countApprovedRegistrationsByShift(shift);
     }
 
     public List<ShiftRegistration> getActiveRegistrationsForGuard(Guard guard) {
-        return shiftRegRepo.findActiveRegistrationsByGuard(guard);
+        return shiftRegistrationRepository.findActiveRegistrationsByGuard(guard);
     }
 
     public ShiftRegistration addRegistration(ShiftRegistration shiftRegistration) {
@@ -62,10 +61,7 @@ public class ShiftRegistrationService {
         if (guard == null || shift == null) {
             throw new IllegalArgumentException("Guard and Shift must not be null");
         }
-            // Limiting shifts to the guard role (An admin cannot sign up for shifts)
-        if (!guard.isGuard()) {
-            throw new IllegalArgumentException("User must be a guard to register for a shift");
-        }
+
             // Making sure you cannot sign up for shift that's already taking place or has taken place.
         if (shift.getShiftStart().isBefore(java.time.LocalDateTime.now())) {
             throw new IllegalArgumentException("Cannot register for a shift in the past");
@@ -96,6 +92,10 @@ public class ShiftRegistrationService {
         ShiftRegistration registration = shiftRegistrationRepository.findById(registrationId)
                 .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
 
+        if (!userRepository.existsById(admin.getUserId())) {
+            throw new EntityDoesNotExistException("No admin with ID " + admin.getUserId() + " exists");
+        }
+
         if (registration.getRegistrationStatus() != RegistrationStatus.PENDING) {
             throw new IllegalArgumentException("Only pending registrations can be approved");
         }
@@ -108,6 +108,10 @@ public class ShiftRegistrationService {
     public ShiftRegistration rejectRegistration(Long registrationId, Admin admin) {
         ShiftRegistration registration = shiftRegistrationRepository.findById(registrationId)
                 .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
+
+        if (!userRepository.existsById(admin.getUserId())) {
+            throw new EntityDoesNotExistException("No admin with ID " + admin.getUserId() + " exists");
+        }
 
         if (registration.getRegistrationStatus() != RegistrationStatus.PENDING) {
             throw new IllegalArgumentException("Only pending registrations can be rejected");
@@ -122,6 +126,10 @@ public class ShiftRegistrationService {
         ShiftRegistration registration = shiftRegistrationRepository.findById(registrationId)
                 .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
 
+        if (!userRepository.existsById(admin.getUserId())) {
+            throw new EntityDoesNotExistException("No admin with ID " + admin.getUserId() + " exists");
+        }
+
         registration.setRegistrationStatus(RegistrationStatus.CANCELED);
         return shiftRegistrationRepository.save(registration);
 
@@ -129,7 +137,7 @@ public class ShiftRegistrationService {
     }
 
     // A Guard has the ability to remove himself from a shift (Only if the registration is pending).
-    public ShiftRegistration cancelRegistration(Long registrationId, User guard) {
+    public ShiftRegistration cancelRegistration(Long registrationId, Guard guard) {
         ShiftRegistration registration = shiftRegistrationRepository.findById(registrationId)
                 .orElseThrow(() -> new IllegalArgumentException("No registration found with id: " + registrationId));
 
@@ -158,7 +166,7 @@ public class ShiftRegistrationService {
     }
 
     public ShiftRegistration addRegistrationByGuardAndShiftIds(Long guardId, Long shiftId) {
-        User guard = userRepository.findById(guardId).orElseThrow(() -> new EntityDoesNotExistException("No guard with ID " + guardId + " exists"));
+        Guard guard = (Guard) userRepository.findById(guardId).orElseThrow(() -> new EntityDoesNotExistException("No guard with ID " + guardId + " exists"));
         Shift shift = shiftRepository.findById(shiftId).orElseThrow(() -> new EntityDoesNotExistException("No shift with ID " + shiftId + " exists"));
         return addRegistration(new ShiftRegistration(null, guard, shift, RegistrationStatus.PENDING));
     }

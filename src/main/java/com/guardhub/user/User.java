@@ -1,11 +1,15 @@
 package com.guardhub.user;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.DiscriminatorFormula;
 
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+/*
+WHAT CAME BEFORE THE FOLLOWING LINE CAUSED ME TO WASTE THREE HOURS.
+TOOK ME 3 HOURS TO FIX THIS, H2 BUILT ITS OWN WRONG CONSTRAINT, EXPECTING AN ENUM -- MAX */
+@DiscriminatorFormula("case when user_type = 'ADMIN' then 'ADMIN' else 'GUARD' end")
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,7 +83,7 @@ public abstract class User {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "id=" + userId +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -90,7 +94,7 @@ public abstract class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
-        return id != null && id.equals(user.id);
+        return userId != null && this.userId.equals(user.userId);
     }
 
     @Override

@@ -10,9 +10,9 @@ import com.guardhub.shift.ShiftRepository;
 import com.guardhub.shift.registration.RegistrationStatus;
 import com.guardhub.shift.registration.ShiftRegistration;
 import com.guardhub.shift.registration.ShiftRegistrationRepository;
+import com.guardhub.user.Guard;
 import com.guardhub.user.User;
 import com.guardhub.user.UserRepository;
-import com.guardhub.user.UserType;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,9 +40,10 @@ public class ShiftRegistrationRepositoryTests {
     @Autowired
     private EntityManager em;
 
-    private List<User> savedGuards = List.of();
+    private List<Guard> savedGuards = List.of();
     private List<Shift> savedShifts = List.of();
     private List<ShiftRegistration> savedRegistrations = List.of();
+
     @Autowired
     private CityRepository cityRepository;
 
@@ -54,10 +55,10 @@ public class ShiftRegistrationRepositoryTests {
         Client client = new Client("ExampleRoad, ExampleCity, ExampleCountry", city, "a@example.com", null, "ExampleCompany");
         clientRepository.save(client);
 
-        User guard1 = new User(null, "Jorn", "abcdefg", "jorn@example.com", "12345678", UserType.GUARD); // Replace with Guard once others merge
-        User guard2 = new User(null, "Jorno", "gefbc", "jorno@example.com", "87654321", UserType.GUARD);
-        User guard3 = new User(null, "Jorna", "ee0efc", "jorna@example.com", "13245768", UserType.GUARD);
-        User guard4 = new User(null, "Jornu", "a0b1c2", "jornu@example.com", "86754231", UserType.GUARD);
+        Guard guard1 = new Guard(null, "Jorn", "abcdefg", "jorn@example.com", "12345678");
+        Guard guard2 = new Guard(null, "Jorno", "gefbc", "jorno@example.com", "87654321");
+        Guard guard3 = new Guard(null, "Jorna", "ee0efc", "jorna@example.com", "13245768");
+        Guard guard4 = new Guard(null, "Jornu", "a0b1c2", "jornu@example.com", "86754231");
 
         savedGuards = userRepository.saveAll(List.of(guard1, guard2, guard3, guard4));
 

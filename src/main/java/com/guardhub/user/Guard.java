@@ -59,7 +59,7 @@ public class Guard extends User {
     @Override
     public String toString() {
         return "Guard{" +
-                "id=" + getId() +
+                "id=" + getUserId() +
                 ", name='" + getName() + '\'' +
                 ", email='" + getEmail() + '\'' +
                 ", phoneNumber='" + getPhoneNumber() + '\'' +

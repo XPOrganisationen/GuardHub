@@ -24,17 +24,11 @@ public class ShiftRegistration {
     @Enumerated(EnumType.STRING)
     private RegistrationStatus registrationStatus;
 
-    public ShiftRegistration(Long registrationId, User guard, Shift shift, RegistrationStatus registrationStatus) {
-        this.registrationId = registrationId;
-        this.guard = guard;
-        this.shift = shift;
-        this.registrationStatus = registrationStatus;
-    }
-
     public ShiftRegistration() {}
 
     public ShiftRegistration(Long registrationId, Guard guard, Shift shift, RegistrationStatus regStatus) {
-        this(guard, shift);
+        this.guard = guard;
+        this.shift = shift;
         this.registrationId = registrationId;
         this.registrationStatus = regStatus;
     }

@@ -1,6 +1,7 @@
 package com.guardhub.shift.registration;
 
 import com.guardhub.shift.Shift;
+import com.guardhub.user.Guard;
 import com.guardhub.user.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,4 +27,15 @@ public interface ShiftRegistrationRepository extends JpaRepository <ShiftRegistr
     @Transactional
     @Query("DELETE FROM ShiftRegistration r WHERE r.shift.shiftId = :shiftId AND r.guard.userId = :guardId")
     void deleteByShiftIdAndGuardId(@Param("shiftId") Long shiftId, @Param("guardId") Long guardId);
+
+    List<ShiftRegistration> findAllByGuard(Guard guard);
+
+    @Query("SELECT r FROM ShiftRegistration r WHERE r.registrationStatus = :registrationStatus")
+    List<ShiftRegistration> findByRegistrationStatus(@Param("registrationStatus") RegistrationStatus registrationStatus);
+
+    @Query("SELECT COUNT(r) FROM ShiftRegistration r WHERE r.shift = :shift AND r.registrationStatus = 'APPROVED'")
+    long countApprovedRegistrationsByShift(@Param("shift") Shift shift);
+
+    @Query("SELECT r FROM ShiftRegistration r WHERE r.guard = :guard")
+    List<ShiftRegistration> findActiveRegistrationsByGuard(@Param("guard") Guard guard);
 }

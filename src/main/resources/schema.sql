@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT,
     password TEXT,
     phone_number TEXT,
-    user_type ENUM('ADMIN', 'GUARD')
+    user_type VARCHAR(50)
 );
 
 CREATE TABLE IF NOT EXISTS guard_certificates (
