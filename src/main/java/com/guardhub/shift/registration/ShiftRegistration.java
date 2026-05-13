@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.guardhub.shift.Shift;
 import com.guardhub.user.Guard;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "shift_registrations")
@@ -22,6 +23,8 @@ public class ShiftRegistration {
     private Shift shift;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(nullable = false)
     private RegistrationStatus registrationStatus;
 
     public ShiftRegistration() {}

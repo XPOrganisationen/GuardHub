@@ -1,6 +1,7 @@
 package com.guardhub.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import org.hibernate.annotations.DiscriminatorFormula;
 
 @Entity
@@ -15,12 +16,28 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 32, message = "Name must be between 3 and 32 characters")
+    @Pattern(regexp = "[\\p{L} ]+", message = "Name must not contain any digits or non-letters (except single whitespace)")
+    @Column(nullable = false)
     private String name;
+
+    @NotNull
+    @NotBlank
+    @Column(nullable = false)
     private String password; // NOTE: NEEDS HASHING
 
+    @Email
+    @NotBlank
     @Column(unique = true, nullable = false)
     private String email;
 
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 15, message = "Phone number must be between 3 and 15 digits in length")
+    @Pattern(regexp = "\\d{3,15}")
+    @Column(nullable = false)
     private String phoneNumber;
 
     public User() {}

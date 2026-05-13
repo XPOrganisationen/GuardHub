@@ -1,7 +1,11 @@
 package com.guardhub.client;
 
 import com.guardhub.city.City;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
@@ -13,13 +17,24 @@ public class Client {
     @Column(name = "client_id", nullable = false)
     private Long id;
 
+    @NotNull
+    @NotBlank
+    @Column(nullable = false)
     private String name;
+
+    @Email
+    @NotNull
+    @NotBlank
+    @Column(nullable = false)
     private String email;
 
     @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "city")
     private City city;
 
+    @NotNull
+    @NotBlank
+    @Column(nullable = false)
     private String address;
 
     public Client() {}
@@ -44,7 +59,7 @@ public class Client {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(@Nonnull String address) {
         this.address = address;
     }
 
@@ -52,7 +67,7 @@ public class Client {
         return city;
     }
 
-    public void setCity(City city) {
+    public void setCity(@Nonnull City city) {
         this.city = city;
     }
 
@@ -60,7 +75,7 @@ public class Client {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@Nonnull String email) {
         this.email = email;
     }
 
@@ -68,7 +83,7 @@ public class Client {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@Nonnull String name) {
         this.name = name;
     }
 

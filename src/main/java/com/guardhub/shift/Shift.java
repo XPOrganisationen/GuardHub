@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.guardhub.client.Client;
 import com.guardhub.shift.registration.ShiftRegistration;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,17 +18,31 @@ public class Shift {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shiftId;
 
+    @NotNull
+    @NotBlank
+    @Column(nullable = false)
     private String title;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id")
     private Client client;
+
+    @NotNull
+    @Column(nullable = false)
     private LocalDateTime shiftStart;
+
+    @NotNull
+    @Column(nullable = false)
     private LocalDateTime shiftEnd;
     //    private List<Certificate> requiredCertificates;
+
+    @NotNull
     @Column(name = "required_guards")
     private int requiredGuardAmount;
 
+    @NotNull
+    @NotBlank
+    @Column(nullable = false)
     private String description;
 
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL, orphanRemoval = true)

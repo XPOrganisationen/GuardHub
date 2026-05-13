@@ -83,7 +83,7 @@ public class ShiftRegistrationController {
     }
 
     @DeleteMapping("/{registrationId}/remove")
-    public ResponseEntity<ShiftRegistration> removeGuardFromShift(@PathVariable Long registrationId, @RequestParam Long adminId) {
+    public ResponseEntity<Void> removeGuardFromShift(@PathVariable Long registrationId, @RequestParam Long adminId) {
         Admin admin = (Admin) userService.findById(adminId);
         shiftRegistrationService.removeGuardFromShift(registrationId, admin);
         return ResponseEntity.noContent().build();

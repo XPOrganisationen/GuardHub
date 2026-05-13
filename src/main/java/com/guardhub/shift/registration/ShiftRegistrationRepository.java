@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShiftRegistrationRepository extends JpaRepository <ShiftRegistration, Long> {
-    Optional<ShiftRegistration> findByGuardAndShift(User guard, Shift shift);
+    Optional<ShiftRegistration> findByGuardAndShift(Guard guard, Shift shift);
 
     List<ShiftRegistration> findByShiftAndRegistrationStatus(Shift shift, RegistrationStatus regStatus);
 
