@@ -3,7 +3,6 @@ package com.guardhub.shift.registration;
 import com.guardhub.shift.Shift;
 import com.guardhub.user.Admin;
 import com.guardhub.user.Guard;
-import com.guardhub.user.User;
 import com.guardhub.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

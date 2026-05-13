@@ -1,5 +1,5 @@
 import {BASE_API_URL, sendRequestTo, shiftDateToTimeString} from "./util.js";
-import {openShiftModal, buildModal} from "./shift_modal.js";
+import {buildModal, openShiftModal} from "./shift_modal.js";
 
 window.addEventListener('DOMContentLoaded', init);
 

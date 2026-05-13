@@ -1,5 +1,7 @@
 package com.guardhub.shift;
 
+import com.guardhub.exceptions.EntityDoesNotExistException;
+import com.guardhub.user.UserRepository;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class ShiftServiceImpl implements ShiftService {
     private final ShiftRepository shiftRepository;
+    private final UserRepository userRepository;
 
-    public ShiftServiceImpl(ShiftRepository shiftRepository) {
+    public ShiftServiceImpl(ShiftRepository shiftRepository, UserRepository userRepository) {
         this.shiftRepository = shiftRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -28,6 +32,10 @@ public class ShiftServiceImpl implements ShiftService {
 
     @Override
     public Map<DayOfWeek, List<ShiftDTO>> findAllForGuardForWeek(Long guardId, Long weekOffset) {
+        if (!userRepository.existsById(guardId)) {
+            throw new EntityDoesNotExistException("No guard with ID " + guardId + " exists");
+        }
+
         Pair<LocalDateTime, LocalDateTime> startEnd = weekOffsetToWeekLimits(weekOffset);
         List<ShiftDTO> shifts = shiftRepository.findAllForGuardForWeek(guardId, startEnd.getFirst(), startEnd.getSecond());
         return sortShiftResults(shifts);

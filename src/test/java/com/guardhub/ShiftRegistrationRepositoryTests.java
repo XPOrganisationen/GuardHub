@@ -44,6 +44,8 @@ public class ShiftRegistrationRepositoryTests {
     private List<Shift> savedShifts = List.of();
     private List<ShiftRegistration> savedRegistrations = List.of();
 
+    private final LocalDateTime TEST_MONDAY = LocalDateTime.of(2030, 1, 7, 0, 0);
+
     @Autowired
     private CityRepository cityRepository;
 
@@ -62,13 +64,18 @@ public class ShiftRegistrationRepositoryTests {
 
         savedGuards = userRepository.saveAll(List.of(guard1, guard2, guard3, guard4));
 
-        Shift shift1 = new Shift(null, "example title", client, "example description", 4, LocalDateTime.of(2026, 5, 14, 8, 0, 0), LocalDateTime.of(2026, 5, 14, 16, 0, 0));
-        Shift shift2 = new Shift(null, "example titl3", client, "3xample description", 2, LocalDateTime.of(2026, 5, 14, 8, 0, 0), LocalDateTime.of(2026, 5, 14, 16, 0, 0));
-        Shift shift3 = new Shift(null, "ex4mple titl3", client, "3x4mpl3 descripti0n", 3, LocalDateTime.of(2026, 5, 15, 8, 0, 0), LocalDateTime.of(2026, 5, 15, 16, 0, 0));
-        Shift shift4 = new Shift(null, "ex4mpl3 titl3", client, "3x4mpl3 d3scripti0n", 9, LocalDateTime.of(2026, 5, 15, 8, 0, 0), LocalDateTime.of(2026, 5, 15, 16, 0, 0));
-        Shift shift5 = new Shift(null, "ex4mpl3 titl3", client, "3x4mpl3 d3scripti0n", 1, LocalDateTime.of(2026, 5, 16, 8, 0, 0), LocalDateTime.of(2026, 5, 16, 16, 0, 0));
+        Shift shift1 = new Shift(null, "example title", client, "example description", 4, TEST_MONDAY.plusDays(3).withHour(8), TEST_MONDAY.plusDays(3).withHour(16));
+        Shift shift2 = new Shift(null, "example titl3", client, "3xample description", 2, TEST_MONDAY.plusDays(3).withHour(8), TEST_MONDAY.plusDays(3).withHour(16));
+        Shift shift3 = new Shift(null, "ex4mple titl3", client, "3x4mpl3 descripti0n", 3, TEST_MONDAY.plusDays(4).withHour(8), TEST_MONDAY.plusDays(4).withHour(16));
+        Shift shift4 = new Shift(null, "ex4mpl3 titl3", client, "3x4mpl3 d3scripti0n", 9, TEST_MONDAY.plusDays(4).withHour(8), TEST_MONDAY.plusDays(4).withHour(16));
+        Shift shift5 = new Shift(null, "ex4mpl3 titl3", client, "3x4mpl3 d3scripti0n", 1, TEST_MONDAY.plusDays(5).withHour(8), TEST_MONDAY.plusDays(5).withHour(16));
 
-        savedShifts = shiftRepository.saveAll(List.of(shift1, shift2, shift3, shift4, shift5));
+        // Outside the week: should not appear in results
+        Shift shift6 = new Shift(null, "3x4mpl3 t1tl3", client, "3x4mpl3 d3scr1pti0n", 10, TEST_MONDAY.plusDays(12).withHour(8), TEST_MONDAY.plusDays(12).withHour(16));
+
+        savedShifts = shiftRepository.saveAll(
+                List.of(shift1, shift2, shift3, shift4, shift5, shift6)
+        );
 
         ShiftRegistration shiftRegistration1 = new ShiftRegistration(null, guard1, shift1, RegistrationStatus.APPROVED);
         ShiftRegistration shiftRegistration2 = new ShiftRegistration(null, guard1, shift2, RegistrationStatus.PENDING);

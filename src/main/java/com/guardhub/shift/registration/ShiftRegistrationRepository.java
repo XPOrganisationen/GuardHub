@@ -2,7 +2,6 @@ package com.guardhub.shift.registration;
 
 import com.guardhub.shift.Shift;
 import com.guardhub.user.Guard;
-import com.guardhub.user.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

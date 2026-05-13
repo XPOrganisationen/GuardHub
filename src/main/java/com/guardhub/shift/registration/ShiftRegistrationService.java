@@ -3,10 +3,9 @@ package com.guardhub.shift.registration;
 import com.guardhub.exceptions.EntityDoesNotExistException;
 import com.guardhub.shift.Shift;
 import com.guardhub.shift.ShiftRepository;
-import com.guardhub.user.User;
-import com.guardhub.user.UserRepository;
 import com.guardhub.user.Admin;
 import com.guardhub.user.Guard;
+import com.guardhub.user.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -154,14 +153,34 @@ public class ShiftRegistrationService {
     }
 
     public List<String> findAcceptedGuardNamesByShiftId(Long shiftId) {
+        if (!shiftRepository.existsById(shiftId)) {
+            throw new EntityDoesNotExistException("No shift with ID " + shiftId + " exists");
+        }
+
         return shiftRegistrationRepository.findAcceptedGuardNamesByShiftId(shiftId);
     }
 
     public Boolean guardHasRegistrationForShift(Long guardId, Long shiftId) {
+        if (!shiftRepository.existsById(shiftId)) {
+            throw new EntityDoesNotExistException("No shift with ID " + shiftId + " exists");
+        }
+
+        if (!userRepository.existsById(guardId)) {
+            throw new EntityDoesNotExistException("No guard with ID " + guardId + " exists");
+        }
+
         return shiftRegistrationRepository.guardHasRegistrationForShift(guardId, shiftId);
     }
 
     public void deleteRegistrationByShiftIdAndGuardId(Long shiftId, Long guardId) {
+        if (!shiftRepository.existsById(shiftId)) {
+            throw new EntityDoesNotExistException("No shift with ID " + shiftId + " exists");
+        }
+
+        if (!userRepository.existsById(guardId)) {
+            throw new EntityDoesNotExistException("No guard with ID " + guardId + " exists");
+        }
+
         shiftRegistrationRepository.deleteByShiftIdAndGuardId(shiftId, guardId);
     }
 

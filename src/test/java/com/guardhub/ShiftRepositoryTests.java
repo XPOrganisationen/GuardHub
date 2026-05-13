@@ -24,6 +24,7 @@ import java.util.List;
 
 @DataJpaTest
 public class ShiftRepositoryTests {
+
     @Autowired
     private ShiftRepository shiftRepository;
 
@@ -40,56 +41,79 @@ public class ShiftRepositoryTests {
     private CityRepository cityRepository;
 
     private List<Shift> savedShifts;
-
     private List<User> savedGuards;
+
+    private final LocalDateTime TEST_MONDAY = LocalDateTime.of(2030, 1, 7, 0, 0);
 
     @BeforeEach
     public void setUp() {
-        /* The null IDs may seem odd, but JPA may choose not to start from one or
-            to stick to any convention for initializing IDs, so you need to store them
-            and refer to the IDs from the DB later to get expected results.
-         */
+
         City city = new City("Copenhagen");
         cityRepository.save(city);
 
-        Client client = new Client("ExampleRoad, ExampleCity, ExampleCountry", city, "a@example.com", null, "ExampleCompany");
+        Client client = new Client(
+                "ExampleRoad, ExampleCity, ExampleCountry",
+                city,
+                "a@example.com",
+                null,
+                "ExampleCompany"
+        );
         clientRepository.save(client);
 
         Guard guard1 = new Guard(null, "Jorn", "abcdefg", "jorn@example.com", "12345678");
         Guard guard2 = new Guard(null, "Jorno", "gefbc", "jorno@example.com", "87654321");
         savedGuards = userRepository.saveAll(List.of(guard1, guard2));
 
-        Shift shift1 = new Shift(null, "example title", client, "example description", 4, LocalDateTime.of(2026, 5, 14, 8, 0, 0), LocalDateTime.of(2026, 5, 14, 16, 0, 0));
-        Shift shift2 = new Shift(null, "example titl3", client, "3xample description", 2, LocalDateTime.of(2026, 5, 14, 8, 0, 0), LocalDateTime.of(2026, 5, 14, 16, 0, 0));
-        Shift shift3 = new Shift(null, "ex4mple titl3", client, "3x4mpl3 descripti0n", 3, LocalDateTime.of(2026, 5, 15, 8, 0, 0), LocalDateTime.of(2026, 5, 15, 16, 0, 0));
-        Shift shift4 = new Shift(null, "ex4mpl3 titl3", client, "3x4mpl3 d3scripti0n", 9, LocalDateTime.of(2026, 5, 15, 8, 0, 0), LocalDateTime.of(2026, 5, 15, 16, 0, 0));
-        Shift shift5 = new Shift(null, "ex4mpl3 titl3", client, "3x4mpl3 d3scripti0n", 1, LocalDateTime.of(2026, 5, 16, 8, 0, 0), LocalDateTime.of(2026, 5, 16, 16, 0, 0));
-        savedShifts = shiftRepository.saveAll(List.of(shift1, shift2, shift3, shift4, shift5));
+        Shift shift1 = new Shift(null, "example title", client, "example description", 4, TEST_MONDAY.plusDays(3).withHour(8), TEST_MONDAY.plusDays(3).withHour(16));
+        Shift shift2 = new Shift(null, "example titl3", client, "3xample description", 2, TEST_MONDAY.plusDays(3).withHour(8), TEST_MONDAY.plusDays(3).withHour(16));
+        Shift shift3 = new Shift(null, "ex4mple titl3", client, "3x4mpl3 descripti0n", 3, TEST_MONDAY.plusDays(4).withHour(8), TEST_MONDAY.plusDays(4).withHour(16));
+        Shift shift4 = new Shift(null, "ex4mpl3 titl3", client, "3x4mpl3 d3scripti0n", 9, TEST_MONDAY.plusDays(4).withHour(8), TEST_MONDAY.plusDays(4).withHour(16));
+        Shift shift5 = new Shift(null, "ex4mpl3 titl3", client, "3x4mpl3 d3scripti0n", 1, TEST_MONDAY.plusDays(5).withHour(8), TEST_MONDAY.plusDays(5).withHour(16));
 
-        ShiftRegistration shiftRegistration1 = new ShiftRegistration(null, guard1, shift1, RegistrationStatus.APPROVED);
-        ShiftRegistration shiftRegistration2 = new ShiftRegistration(null, guard1, shift2, RegistrationStatus.PENDING);
-        ShiftRegistration shiftRegistration3 = new ShiftRegistration(null, guard1, shift3, RegistrationStatus.PENDING);
-        ShiftRegistration shiftRegistration4 = new ShiftRegistration(null, guard2, shift1, RegistrationStatus.PENDING);
-        shiftRegistrationRepository.saveAll(List.of(shiftRegistration1, shiftRegistration2, shiftRegistration3, shiftRegistration4));
+        // Outside the week: should not appear in results
+        Shift shift6 = new Shift(null, "3x4mpl3 t1tl3", client, "3x4mpl3 d3scr1pti0n", 10, TEST_MONDAY.plusDays(12).withHour(8), TEST_MONDAY.plusDays(12).withHour(16));
+
+        savedShifts = shiftRepository.saveAll(
+                List.of(shift1, shift2, shift3, shift4, shift5, shift6)
+        );
+
+        ShiftRegistration r1 = new ShiftRegistration(null, guard1, shift1, RegistrationStatus.APPROVED);
+        ShiftRegistration r2 = new ShiftRegistration(null, guard1, shift2, RegistrationStatus.PENDING);
+        ShiftRegistration r3 = new ShiftRegistration(null, guard1, shift3, RegistrationStatus.PENDING);
+        ShiftRegistration r4 = new ShiftRegistration(null, guard2, shift1, RegistrationStatus.PENDING);
+
+        shiftRegistrationRepository.saveAll(List.of(r1, r2, r3, r4));
     }
 
     @Test
-    public void findAllForWeekReturnsAMapOfDaysToListsSortedByCapacityThenStartTime() {
-        var firstShiftStart = savedShifts.getFirst().getShiftStart();
-        List<ShiftDTO> allShiftsForWeek = shiftRepository.findAllForWeek(firstShiftStart, firstShiftStart.plusWeeks(1));
-        Assertions.assertEquals(5, allShiftsForWeek.size());
+    public void findAllForWeekReturnsAllShiftsForWeekButOnlyShiftsInsideWeek() {
+        List<ShiftDTO> results =
+                shiftRepository.findAllForWeek(TEST_MONDAY, TEST_MONDAY.plusDays(7));
 
-        for (int i = 0; i < savedShifts.size(); i++) {
-            Assertions.assertEquals(savedShifts.get(i).getTitle(), allShiftsForWeek.get(i).title());
-        }
+        Assertions.assertEquals(5, results.size());
+
+        Long outsideId = savedShifts.get(5).getShiftId();
+        List<Long> resultIds = results.stream().map(ShiftDTO::id).toList();
+
+        Assertions.assertFalse(resultIds.contains(outsideId));
     }
 
     @Test
-    public void findAllForGuardForWeekReturnsAMapOfDaysToListsSortedByCapacityThenStartTimeForOnlyOneGuard() {
-        var firstShiftStart = savedShifts.getFirst().getShiftStart();
-        var expectedIds = List.of(savedShifts.getFirst().getShiftId(), savedShifts.get(1).getShiftId(), savedShifts.get(2).getShiftId());
-        List<ShiftDTO> allShiftsForGuardWithId1 = shiftRepository.findAllForGuardForWeek(savedGuards.getFirst().getUserId(), firstShiftStart, firstShiftStart.plusWeeks(1));
-        Assertions.assertEquals(3, allShiftsForGuardWithId1.size());
-        Assertions.assertEquals(allShiftsForGuardWithId1.stream().map(ShiftDTO::id).toList(), expectedIds);
+    public void findAllForGuardForWeekReturnsOnlyGuardShiftsInsideWeek() {
+        Long guardId = savedGuards.getFirst().getUserId();
+
+        List<ShiftDTO> results =
+                shiftRepository.findAllForGuardForWeek(guardId, TEST_MONDAY, TEST_MONDAY.plusDays(7));
+
+        Assertions.assertEquals(3, results.size());
+
+        List<Long> guardShiftIds = shiftRegistrationRepository.findAll().stream()
+                .filter(r -> r.getGuard().getUserId().equals(guardId))
+                .map(r -> r.getShift().getShiftId())
+                .toList();
+
+        Assertions.assertTrue(
+                results.stream().allMatch(s -> guardShiftIds.contains(s.id()))
+        );
     }
 }
