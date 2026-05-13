@@ -54,7 +54,7 @@ public class ShiftRegistrationService {
     }
 
     public ShiftRegistration addRegistration(ShiftRegistration shiftRegistration) {
-        User guard = shiftRegistration.getGuard();
+        Guard guard = shiftRegistration.getGuard();
         Shift shift = shiftRegistration.getShift();
 
             // for a shift registration to go through, a guard must be assigned a shift that is existent.
