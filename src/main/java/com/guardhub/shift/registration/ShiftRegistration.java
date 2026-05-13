@@ -1,13 +1,14 @@
 package com.guardhub.shift.registration;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.guardhub.shift.Shift;
 import com.guardhub.user.Guard;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "shift_registrations")
 public class ShiftRegistration {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long registrationId;
@@ -17,22 +18,20 @@ public class ShiftRegistration {
     private Guard guard;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonBackReference
     @JoinColumn(name = "shift_id")
     private Shift shift;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(nullable = false)
     private RegistrationStatus registrationStatus;
 
     public ShiftRegistration() {}
 
-    public ShiftRegistration(Guard guard, Shift shift) {
+    public ShiftRegistration(Long registrationId, Guard guard, Shift shift, RegistrationStatus regStatus) {
         this.guard = guard;
         this.shift = shift;
-        this.registrationStatus = RegistrationStatus.PENDING;
-    }
-
-    public ShiftRegistration(Long registrationId, Guard guard, Shift shift, RegistrationStatus regStatus) {
-        this(guard, shift);
         this.registrationId = registrationId;
         this.registrationStatus = regStatus;
     }
@@ -65,8 +64,8 @@ public class ShiftRegistration {
         return registrationStatus;
     }
 
-    public void setRegistrationStatus(RegistrationStatus registrationStatus) {
-        this.registrationStatus = registrationStatus;
+    public void setRegistrationStatus(RegistrationStatus regStatus) {
+        this.registrationStatus = regStatus;
     }
 
     @Override

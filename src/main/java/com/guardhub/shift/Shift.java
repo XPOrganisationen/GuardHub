@@ -1,43 +1,78 @@
 package com.guardhub.shift;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.guardhub.client.Client;
 import com.guardhub.shift.registration.ShiftRegistration;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "shifts")
 public class Shift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shiftId;
 
-    //    private final Client client;
+    @NotNull
+    @NotBlank
+    @Column(nullable = false)
+    private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @NotNull
+    @Column(nullable = false)
     private LocalDateTime shiftStart;
+
+    @NotNull
+    @Column(nullable = false)
     private LocalDateTime shiftEnd;
     //    private List<Certificate> requiredCertificates;
+
+    @NotNull
+    @Column(name = "required_guards")
     private int requiredGuardAmount;
 
-    @Enumerated(EnumType.STRING)
-    private ShiftStatus shiftStatus;
-
+    @NotNull
+    @NotBlank
+    @Column(nullable = false)
     private String description;
 
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ShiftRegistration> shiftRegistrations = new ArrayList<>();
 
-    public enum ShiftStatus {AVAILABLE, ASSIGNED, COMPLETED, CANCELLED}
-
     public Shift() {}
+
+    public Shift(Long shiftId, String title, Client client, String description, int requiredGuardAmount, LocalDateTime shiftStart, LocalDateTime shiftEnd) {
+        this.client = client;
+        this.description = description;
+        this.requiredGuardAmount = requiredGuardAmount;
+        this.shiftEnd = shiftEnd;
+        this.shiftId = shiftId;
+        this.shiftRegistrations = List.of();
+        this.shiftStart = shiftStart;
+        this.title = title;
+    }
 
     public Long getShiftId() {
         return shiftId;
     }
 
-//    public Client getClient() {
-//        return client;
-//    }
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
     public LocalDateTime getShiftStart() {
         return shiftStart;
@@ -110,19 +145,19 @@ public class Shift {
 //        return assignedGuards.contains(guard);
 //    }
 
-    public ShiftStatus getShiftStatus() {
-        return shiftStatus;
-    }
-
-    public void setShiftStatus(ShiftStatus shiftStatus) {
-        this.shiftStatus = shiftStatus;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
