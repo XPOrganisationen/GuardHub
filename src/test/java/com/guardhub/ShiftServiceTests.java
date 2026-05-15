@@ -44,10 +44,14 @@ class ShiftServiceTests {
         return new ShiftDTO(
                 id,
                 "Title " + id,
+                "exampleClient",
                 start,
                 end,
                 "Description " + id,
                 "HQ",
+                false,
+                "12345678",
+                "No parking!",
                 required,
                 registrations
         );

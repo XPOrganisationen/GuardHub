@@ -102,7 +102,7 @@ main {
     padding-right: 12px;
     white-space: nowrap;
 
-    & > .shift-card-header {
+    & > .shift-card-header, .shift-card-location {
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -137,33 +137,41 @@ main {
     width: 14.3%;
 }
 
-#shift-modal {
+#shift-modal-background {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: #D3D3D3;
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+}
+
+#shift-modal {
+    background: #ffffff;
+    display: flex;
+    flex-direction: row;
+    max-width: 60%;
+    align-items: center;
+    justify-content: center;
     column-gap: 16px;
+    padding: 24px;
     border-radius: 8px;
-    position: absolute;
-
-    /* Make modal float on top of existing HTML */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    /* Float end */
-
+    overflow: hidden;
+  
     & > #shift-modal-close-button {
-        position: fixed;
+        position: absolute;
         top: 16px;
         right: 16px;
+        cursor: pointer;
     }
 }
 
 #shift-modal-field-column {
     display: flex;
     flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
 
     & > #shift-modal-description {
         max-height: 25%;
@@ -175,25 +183,19 @@ main {
 #shift-modal-people-column {
     display: flex;
     flex-direction: column;
+    flex: 1 1 0;
+    min-height: 0;
 
     & > #shift-modal-people-column-list-wrapper {
+        flex: 1 1 auto;
         overflow-y: scroll;
-        height: 85%;
     }
 
-    & > #shift-modal-people-column-list {
-        list-style: none;
+    & > #shift-modal-people-column-list > #shift-modal-people-column-list-item {
+        list-style-type: none;
     }
 }
 
 .hidden {
     visibility: hidden;
-}
-
-#shift-modal-background {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 9000;
-    background: #D3D3D3
 }
