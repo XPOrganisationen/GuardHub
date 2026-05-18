@@ -12,42 +12,45 @@ const logoutButton = document.getElementById("logoutButton");
 
 import {BASE_API_URL, sendRequestTo} from "../util.js";
 
-loadGuards();
+await loadGuards();
 
 async function loadGuards(){
     let guards = await sendRequestTo(BASE_API_URL + "users/guards");
-    renderGuards(guards);
+    await renderGuards(guards);
 }
 
 async function renderGuards(guards) {
     userTableBody.innerHTML = "";
 
-    for (const guard of guards) {
-        const row = document.createElement("tr");
+    guards.forEach(guard => userTableBody.appendChild(buildGuardRow(guard)))
+}
 
-        row.innerHTML = `
-        <td>${guard.name}</td>
-        <td>${guard.email}</td>
-        <td>${guard.phoneNumber}</td>
-        <td>
-            <button class="delete-button" >
-            Delete
-            </button> 
-        </td> `
+function buildGuardRow(guard) {
+    let row = document.createElement('tr');
+    row.setAttribute('data-guard-id', guard.userId);
+    let nameCell = document.createElement('td');
+    nameCell.textContent = guard.name;
+    let emailCell = document.createElement('td');
+    emailCell.textContent = guard.email;
+    let phoneCell = document.createElement('td');
+    phoneCell.textContent = guard.phoneNumber;
+    let deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', deleteGuard);
 
-        userTableBody.appendChild(row);
+    row.appendChild(nameCell);
+    row.appendChild(emailCell);
+    row.appendChild(phoneCell);
+    row.appendChild(deleteButton);
 
-        let deleteButton = document.querySelector(".delete-button");
-
-        deleteButton.addEventListener("click", async () => await deleteGuard(guard.id))
-
-    }
+    return row;
 }
     searchInput.addEventListener("input", async function(){
         const searchText = searchInput.value.trim();
 
         if (searchText === ""){
-            loadGuards();
+            await loadGuards();
             return;
         }
 
@@ -64,7 +67,7 @@ async function renderGuards(guards) {
                 return user.userType === "GUARD"; // TODO: Change to rely on abstract class
             });
 
-            renderGuards(guardsOnly);
+            await renderGuards(guardsOnly);
         }
 
         catch (error){
@@ -92,32 +95,35 @@ async function renderGuards(guards) {
             email: document.getElementById("email").value,
             phoneNumber: document.getElementById("phoneNumber").value,
             password: document.getElementById("password").value,
-            userType: "GUARD" // TODO: Adapt it for abstract class
+            userType: "GUARD"
         };
 
 
-        let guards = await sendRequestTo(BASE_API_URL + "users/guard", {
+        await sendRequestTo(BASE_API_URL + "users/guard", {
             method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(newGuard)
         });
 
         addUserModal.classList.add("hidden");
         addUserForm.reset();
 
-        loadGuards();
+        await loadGuards();
     });
 
-    async function deleteGuard(id){
+    async function deleteGuard(e){
         const confirmed = confirm("Are you sure you want to delete this guard?");
 
         if (!confirmed){
             return;
         }
 
-        const response = await sendRequestTo(`/api/users/${id}`, {
+        let closestRow = e.target.closest('tr');
+        let closestRowId = Number.parseInt(closestRow.getAttribute('data-guard-id'));
+
+        await sendRequestTo(BASE_API_URL + `users/${closestRowId}`, {
             method: "DELETE"
         });
 
-        loadGuards();
+        await loadGuards();
     }
 
     logoutButton.addEventListener("click", function()
