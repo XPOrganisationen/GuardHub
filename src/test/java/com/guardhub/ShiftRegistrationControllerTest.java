@@ -72,22 +72,6 @@ class ShiftRegistrationControllerTest {
                 .andExpect(jsonPath("$.registrationStatus").value("APPROVED"));
     }
 
-    /*@Test
-    void approveRegistration_NonAdminFails() throws Exception {
-        // Arrange
-        Guard nonAdmin = new Guard(2L, "Guard User", "password123", "guard@test.com", "87654321");
-
-        when(userService.findById(2L)).thenReturn(nonAdmin);
-        when(shiftRegService.approveRegistration(1L, nonAdmin)) -- Denne linje fejler pågrund af programmets sammensættelse
-                .thenThrow(new IllegalArgumentException("Only admins can approve shift registrations"));
-
-        // Act & Assert
-        mockMvc.perform(post("/api/registrations/1/approve?adminId=2"))
-                .andExpect(status().is4xxClientError());
-    }
-
-     */
-
     @Test
     void rejectRegistration_Success() throws Exception {
         // Arrange
