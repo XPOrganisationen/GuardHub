@@ -1,6 +1,7 @@
 package com.guardhub.client;
 
 import com.guardhub.exceptions.EntityDoesNotExistException;
+import com.guardhub.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,11 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<Client> findAll() {
         return clientRepository.findAll();
+    }
+
+    @Override
+    public List<Client> findAllByName(String name) {
+        return clientRepository.findAllByNameContainingIgnoreCase(name);
     }
 
     @Override
