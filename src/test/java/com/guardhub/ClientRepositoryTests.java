@@ -30,9 +30,9 @@ public class ClientRepositoryTests {
         cityRepository.save(city2);
         cityRepository.save(city3);
 
-        Client client1 = new Client("ExampleRoad1, ExampleCity1, ExampleCountry1", city1, "a1@example.com", 1L, "ExampleCompany1", "12345678");
-        Client client2 = new Client("ExampleRoad2, ExampleCity2, ExampleCountry2", city2, "a2@example.com", 2L, "ExampleCompany2", "22345678");
-        Client client3 = new Client("ExampleRoad3, ExampleCity3, ExampleCountry3", city3, "a3@example.com", 3L, "ExampleCompany3", "32345678");
+        Client client1 = new Client("ExampleRoad1, ExampleCity1, ExampleCountry1", city1, "a1@example.com", null, "ExampleCompany1", "12345678");
+        Client client2 = new Client("ExampleRoad2, ExampleCity2, ExampleCountry2", city2, "a2@example.com", null, "ExampleCompany2", "22345678");
+        Client client3 = new Client("ExampleRoad3, ExampleCity3, ExampleCountry3", city3, "a3@example.com", null, "ExampleCompany3", "32345678");
         clientRepository.save(client1);
         clientRepository.save(client2);
         clientRepository.save(client3);
