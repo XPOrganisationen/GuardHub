@@ -1,5 +1,6 @@
 package com.guardhub.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.guardhub.shift.registration.ShiftRegistration;
 import jakarta.persistence.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 public class Guard extends User {
 
     @OneToMany(mappedBy = "guard", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<ShiftRegistration> shiftRegistrations = new ArrayList<>();
 
     public Guard() {

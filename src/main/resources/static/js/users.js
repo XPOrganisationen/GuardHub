@@ -10,50 +10,47 @@ const formMessage = document.getElementById("formMessage");
 
 const logoutButton = document.getElementById("logoutButton");
 
-loadGuards();
+import {BASE_API_URL, sendRequestTo} from "../util.js";
+
+await loadGuards();
 
 async function loadGuards(){
-    try {
-        const response = await fetch("api/users/by-type/GUARD") // TODO: Need to make this work with our new abstract classes.
-
-        if (!response.ok){
-            throw new Error("Could not load guards");
-        }
-
-        const guards = await response.json();
-
-        renderGuards(guards);
-    }
-    catch (error){
-        userMessage.textContent = "Could not load guards";
-    }
+    let guards = await sendRequestTo(BASE_API_URL + "users/guards");
+    await renderGuards(guards);
 }
 
-function renderGuards(guards) {
+async function renderGuards(guards) {
     userTableBody.innerHTML = "";
 
-    guards.forEach(function (guard) {
-        const row = document.createElement("tr");
+    guards.forEach(guard => userTableBody.appendChild(buildGuardRow(guard)))
+}
 
-        row.innerHTML = `
-        <td>${guard.name}</td>
-        <td>${guard.email}</td>
-        <td>${guard.phoneNumber}</td>
-        <td>
-            <button class="delete-button" onclick="deleteGuard(${guard.id})">
-            Delete
-            </button> 
-        </td>
-        `
+function buildGuardRow(guard) {
+    let row = document.createElement('tr');
+    row.setAttribute('data-guard-id', guard.userId);
+    let nameCell = document.createElement('td');
+    nameCell.textContent = guard.name;
+    let emailCell = document.createElement('td');
+    emailCell.textContent = guard.email;
+    let phoneCell = document.createElement('td');
+    phoneCell.textContent = guard.phoneNumber;
+    let deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', deleteGuard);
 
-        userTableBody.appendChild(row);
-    });
+    row.appendChild(nameCell);
+    row.appendChild(emailCell);
+    row.appendChild(phoneCell);
+    row.appendChild(deleteButton);
+
+    return row;
 }
     searchInput.addEventListener("input", async function(){
         const searchText = searchInput.value.trim();
 
         if (searchText === ""){
-            loadGuards();
+            await loadGuards();
             return;
         }
 
@@ -70,7 +67,7 @@ function renderGuards(guards) {
                 return user.userType === "GUARD"; // TODO: Change to rely on abstract class
             });
 
-            renderGuards(guardsOnly);
+            await renderGuards(guardsOnly);
         }
 
         catch (error){
@@ -94,59 +91,39 @@ function renderGuards(guards) {
         event.preventDefault();
 
         const newGuard = {
-            nname: document.getElementById("name").value,
+            name: document.getElementById("name").value,
             email: document.getElementById("email").value,
             phoneNumber: document.getElementById("phoneNumber").value,
             password: document.getElementById("password").value,
-            userType: "GUARD" // TODO: Adapt it for abstract class
+            userType: "GUARD"
         };
 
-        try {
-            const response = await fetch("api/users", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(newGuard)
-            });
 
-            if (!response.ok){
-                throw new Error("Could not add guard");
-            }
+        await sendRequestTo(BASE_API_URL + "users/guard", {
+            method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(newGuard)
+        });
 
-            addUserModal.classList.add("hidden");
-            addUserForm.reset();
+        addUserModal.classList.add("hidden");
+        addUserForm.reset();
 
-            loadGuards();
-        }
-
-        catch (error){
-            formMessage.textContent = "Could not add guard";
-        }
+        await loadGuards();
     });
 
-    async function deleteGuard(id, name){
+    async function deleteGuard(e){
         const confirmed = confirm("Are you sure you want to delete this guard?");
 
         if (!confirmed){
             return;
         }
 
-        try{
-            const response = await fetch(`/api/users/${id}`, {
-                method: "DELETE"
-            });
+        let closestRow = e.target.closest('tr');
+        let closestRowId = Number.parseInt(closestRow.getAttribute('data-guard-id'));
 
-            if (!response.ok){
-                throw new Error("Could not delete guard");
-            }
+        await sendRequestTo(BASE_API_URL + `users/${closestRowId}`, {
+            method: "DELETE"
+        });
 
-            loadGuards();
-        }
-
-        catch(error){
-            userMessage.textContent = "Could not delete guard";
-        }
+        await loadGuards();
     }
 
     logoutButton.addEventListener("click", function()

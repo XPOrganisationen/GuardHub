@@ -19,7 +19,7 @@
                 class="topbar-logo">
     </div>
 
-    <h1>Guard Management</h1>
+    <h1>Client Management</h1>
 
     <button id="logoutButton" class="logout-button">
         Log out
@@ -31,12 +31,12 @@
     <section class="submenu-card">
         <div class="submenu-header">
             <div>
-                <h2>Guards</h2>
-                <p>View, search and manage guards</p>
+                <h2>Clients</h2>
+                <p>View, search and manage clients</p>
             </div>
 
-            <button id="openAddUserButton" class="primary-button">
-                New guard
+            <button id="openAddClientButton" class="primary-button">
+                New client
             </button>
         </div>
 
@@ -46,7 +46,7 @@
             <input
                     type="text"
                     id="searchInput"
-                    placeholder="Search by name..."
+                    placeholder="Search by name or city..."
             >
         </div>
 
@@ -56,28 +56,28 @@
                 <th>Name</th>
                 <th>E-mail</th>
                 <th>Phone number</th>
-                <th>Actions</th>
+                <th>City</th>
+                <th>Address</th>
             </tr>
             </thead>
 
-            <tbody id="usersTableBody">
+            <tbody id="clientsTableBody">
             </tbody>
         </table>
 
-        <p id="userMessage" class="submenu-message"></p>
+        <p id="clientMessage" class="submenu-message"></p>
     </section>
 </main>
 
-<section id="addUserModal" class="modal hidden">
+<section id="addClientModal" class="modal hidden">
     <div class="modal-card">
-        <h2>Guard Form</h2>
-        <form id="addUserForm">
+        <h2>Client Form</h2>
+        <form id="addClientForm">
 
             <div class="form-group">
                 <label for="name">Name</label>
                 <input id="name" type="text" required>
             </div>
-
 
             <div class="form-group">
                 <label for="email">E-mail</label>
@@ -90,19 +90,24 @@
             </div>
 
             <div class="form-group">
-                <label for="password">Temporary password</label>
-                <input id="password" type="password" required>
+                <label for="city">City</label>
+                <input id="city" type="" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input id="address" type="text" required>
             </div>
 
             <p id="formMessage" class="form-message"></p>
 
             <div class="modal-actions">
-                <button type="button" id="cancelAddUserButton" class="secondary-button">
+                <button type="button" id="cancelAddClientButton" class="secondary-button">
                     Cancel
                 </button>
 
                 <button type="submit" class="primary-button">
-                    Add Guard
+                    Add Client
                 </button>
             </div>
 
@@ -110,6 +115,6 @@
     </div>
 </section>
 
-<script src="js/users.js" type="module"></script>
+<script src="js/clients.js"></script>
 </body>
 </html>
