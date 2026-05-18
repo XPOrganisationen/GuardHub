@@ -31,7 +31,7 @@ loginForm.addEventListener("submit", async function (event)
         if (user.userType === "ADMIN"){
             window.location.href="/administration.html";
         } else if (user.userType === "GUARD"){
-            window.location.href = "/landingPageGuard.html";
+            window.location.href = "/shifts.html";
         }
         else {
             errorMessage.textContent = "Unknown usertype. Please contact support."; //Not sure what to write here; do we want to tell them it's a usertype problem?
