@@ -25,12 +25,12 @@ INSERT INTO users (name, email, password, phone_number, user_type) VALUES
     ('Ethan Patel','ethan.patel@example.com','$2b$12$guardhash4','+12125550505','GUARD'),
     ('Fiona Zhang','fiona.zhang@example.com','$2b$12$guardhash5','+12125550606','GUARD');
 
-INSERT INTO clients (name, email, city, address) VALUES
-    ('Harbor Mall','contact@harbormall.com','Copenhagen', 'Havnepladsen 100, 1058 København, Denmark'),
-    ('Sunset Film Studios','bookings@sunsetstudios.com','Roskilde','Sunsetvej 45, 4000 Roskilde, Denmark'),
-    ('Lakeview Condos','manager@lakeviewcondos.com','Odense','Søpromenaden 200, 5000 Odense, Denmark'),
-    ('Riverside Hospital','hrsecurity@riversidehosp.org','Copenhagen','Roskildevej 12, 2500 Valby (København), Denmark'),
-    ('Oceanfront Resort','events@oceanfrontresort.com','Aarhus','Strandvejen 500, 8000 Aarhus C, Denmark');
+INSERT INTO clients (name, email, phone_number, city, address) VALUES
+    ('Harbor Mall','contact@harbormall.com', '12345678','Copenhagen', 'Havnepladsen 100, 1058 København, Denmark'),
+    ('Sunset Film Studios','bookings@sunsetstudios.com','87654321', 'Roskilde','Sunsetvej 45, 4000 Roskilde, Denmark'),
+    ('Lakeview Condos','manager@lakeviewcondos.com','13245768','Odense','Søpromenaden 200, 5000 Odense, Denmark'),
+    ('Riverside Hospital','hrsecurity@riversidehosp.org','86754231','Copenhagen','Roskildevej 12, 2500 Valby (København), Denmark'),
+    ('Oceanfront Resort','events@oceanfrontresort.com','18273645','Aarhus','Strandvejen 500, 8000 Aarhus C, Denmark');
 
 INSERT INTO guard_certificates (guard_id, certificate_id) VALUES
     (2,1), -- Bob: First Aid
@@ -48,12 +48,12 @@ INSERT INTO guard_certificates (guard_id, certificate_id) VALUES
     (6,2), -- Fiona: CPR
     (6,4); -- Fiona: Crowd Control
 
-INSERT INTO shifts (client_id, title, shift_start, shift_end, description, required_guards) VALUES
-    (1, 'Harbor Mall Night Patrol', '2026-05-15 22:00:00', '2026-05-16 06:00:00', 'Night patrol of mall, focus on entrances and parking areas.', 3),
-    (2, 'Studio Premiere Crowd Control', '2026-05-18 17:00:00', '2026-05-18 23:30:00', 'Manage crowd at studio premiere event; public-facing duties.', 6),
-    (3, 'Lakeview Building Reception', '2026-05-14 07:00:00', '2026-05-14 15:00:00', 'Day shift at condo reception and lobby monitoring.', 1),
-    (4, 'Riverside ER Quick Response', '2026-05-16 00:00:00', '2026-05-16 08:00:00', 'Security presence in ER; occasional patient safety assistance.', 2),
-    (5, 'Oceanfront Resort VIP Event', '2026-05-20 18:00:00', '2026-05-21 02:00:00', 'VIP event with high-profile guests; elevated security.', 4);
+INSERT INTO shifts (client_id, title, shift_start, shift_end, description, food_served, parking_instructions, required_guards) VALUES
+    (1, 'Harbor Mall Night Patrol', '2026-05-15 22:00:00', '2026-05-16 06:00:00', 'Night patrol of mall, focus on entrances and parking areas.', false, 'Free. Use our parking garage at the site of the shift. Your boss knows the code for the gate.', 3),
+    (2, 'Studio Premiere Crowd Control', '2026-05-18 17:00:00', '2026-05-18 23:30:00', 'Manage crowd at studio premiere event; public-facing duties.', true, 'None', 6),
+    (3, 'Lakeview Building Reception', '2026-05-14 07:00:00', '2026-05-14 15:00:00', 'Day shift at condo reception and lobby monitoring.', true, 'The library opposite the condo is not too crowded, try that.', 1),
+    (4, 'Riverside ER Quick Response', '2026-05-16 00:00:00', '2026-05-16 08:00:00', 'Security presence in ER; occasional patient safety assistance.', true, 'None', 2),
+    (5, 'Oceanfront Resort VIP Event', '2026-05-20 18:00:00', '2026-05-21 02:00:00', 'VIP event with high-profile guests; elevated security.', false, 'There is an employee parking lot. We know your license plate numbers, so roll on in.', 4);
 
 INSERT INTO required_certificates (shift_id, certificate_id) VALUES
 -- Harbor Mall: First Aid (1), Site Patrol (6)

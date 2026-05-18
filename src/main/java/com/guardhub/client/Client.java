@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.Objects;
 
@@ -28,6 +29,11 @@ public class Client {
     @Column(nullable = false)
     private String email;
 
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "\\d{3,15}")
+    private String phoneNumber;
+
     @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.REMOVE, CascadeType.DETACH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "city")
     private City city;
@@ -39,12 +45,13 @@ public class Client {
 
     public Client() {}
 
-    public Client(String address, City city, String email, Long id, String name) {
+    public Client(String address, City city, String email, Long id, String name, String phoneNumber) {
         this.address = address;
         this.city = city;
         this.email = email;
         this.id = id;
         this.name = name;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
@@ -87,15 +94,23 @@ public class Client {
         this.name = name;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return Objects.equals(id, client.id) && Objects.equals(name, client.name) && Objects.equals(email, client.email) && Objects.equals(city, client.city) && Objects.equals(address, client.address);
+        return Objects.equals(id, client.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, city, address);
+        return Objects.hashCode(id);
     }
 }

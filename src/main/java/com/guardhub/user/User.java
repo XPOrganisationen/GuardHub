@@ -39,6 +39,8 @@ public abstract class User {
     @Pattern(regexp = "\\d{3,15}")
     @Column(nullable = false)
     private String phoneNumber;
+    @Column(name = "user_type")
+    private String userType;
 
     public User() {}
 
@@ -97,6 +99,14 @@ public abstract class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getUserType() {
+        return userType;
+    }
+
+    protected void setUserType(String userType) {
+        this.userType = userType;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -118,4 +128,6 @@ public abstract class User {
     public int hashCode() {
         return getClass().hashCode();
     }
+
 }
+

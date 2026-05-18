@@ -49,14 +49,19 @@ public class Shift {
     @JsonManagedReference
     private List<ShiftRegistration> shiftRegistrations = new ArrayList<>();
 
+    private boolean foodServed;
+    private String parkingInstructions;
+
     public Shift() {}
 
-    public Shift(Long shiftId, String title, Client client, String description, int requiredGuardAmount, LocalDateTime shiftStart, LocalDateTime shiftEnd) {
+    public Shift(Long shiftId, String title, Client client, String description, int requiredGuardAmount, LocalDateTime shiftStart, LocalDateTime shiftEnd, boolean foodServed, String parkingInstructions) {
         this.client = client;
         this.description = description;
         this.requiredGuardAmount = requiredGuardAmount;
         this.shiftEnd = shiftEnd;
         this.shiftId = shiftId;
+        this.foodServed = foodServed;
+        this.parkingInstructions = parkingInstructions;
         this.shiftRegistrations = List.of();
         this.shiftStart = shiftStart;
         this.title = title;
@@ -159,5 +164,21 @@ public class Shift {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isFoodServed() {
+        return foodServed;
+    }
+
+    public void setFoodServed(boolean foodServed) {
+        this.foodServed = foodServed;
+    }
+
+    public String getParkingInstructions() {
+        return parkingInstructions;
+    }
+
+    public void setParkingInstructions(String parkingInstructions) {
+        this.parkingInstructions = parkingInstructions;
     }
 }

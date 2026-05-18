@@ -15,14 +15,17 @@ public class Guard extends User {
 
     public Guard() {
         super();
+        setUserType("GUARD");
     }
 
     public Guard(String name, String password, String email, String phoneNumber) {
         super(name, password, email, phoneNumber);
+        setUserType("GUARD");
     }
 
     public Guard(Long id, String name, String password, String email, String phoneNumber) {
         super(id, name, password, email, phoneNumber);
+        setUserType("GUARD");
     }
 
     public List<ShiftRegistration> getShiftRegistrations() {
