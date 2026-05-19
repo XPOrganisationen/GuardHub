@@ -99,14 +99,14 @@ public class ShiftRegistrationRepositoryTests {
     }
 
     @Test
-    public void findAcceptedGuardNamesFindsAllGuardsApprovedForAShift() {
+    public void findAcceptedGuardsFindsAllGuardsApprovedForAShift() {
         List<String> expectedNames = List.of("Jorn", "Jornu");
-        Assertions.assertEquals(expectedNames, shiftRegistrationRepository.findAcceptedGuardNamesByShiftId(savedShifts.getFirst().getShiftId()));
+        Assertions.assertEquals(expectedNames, shiftRegistrationRepository.findAcceptedGuardsByShiftId(savedShifts.getFirst().getShiftId()).stream().map(User::getName).toList());
     }
 
     @Test
-    public void findAcceptedGuardNamesFindsNoGuardsIfNoneApprovedForAShift() {
-        Assertions.assertEquals(List.of(), shiftRegistrationRepository.findAcceptedGuardNamesByShiftId(savedShifts.get(1).getShiftId()));
+    public void findAcceptedGuardsFindsNoGuardsIfNoneApprovedForAShift() {
+        Assertions.assertEquals(List.of(), shiftRegistrationRepository.findAcceptedGuardsByShiftId(savedShifts.get(1).getShiftId()));
     }
 
     @Test

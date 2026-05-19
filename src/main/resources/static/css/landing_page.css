@@ -4,6 +4,7 @@ main {
     align-items: center;
     flex-direction: column;
     gap: 16px;
+    margin-top: 20px;
 }
 
 #switch-calendar-view-row {
@@ -58,7 +59,7 @@ main {
 }
 
 .calendar-week-navigation-btn{
-    --size: 64px;
+    --size: clamp(40px, 5vmin, 64px);
     display: inline-grid;
     place-items: center;
     width: var(--size);
@@ -121,7 +122,8 @@ main {
 }
 
 .header-cell {
-    background-color: blueviolet;
+    background-color: black;
+    color: white;
     text-align: center;
 }
 
@@ -135,65 +137,116 @@ main {
     display: flex;
     flex-direction: column;
     width: 14.3%;
+    background: #ffffff;
 }
 
 #shift-modal-background {
     position: fixed;
     inset: 0;
     z-index: 9000;
-    background: #D3D3D3;
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 16px;
 }
 
 #shift-modal {
     background: #ffffff;
     display: flex;
     flex-direction: row;
-    max-width: 60%;
-    align-items: center;
-    justify-content: center;
-    column-gap: 16px;
+    width: 60%;
     padding: 24px;
     border-radius: 8px;
+    position: relative;
+    max-height: 80vh;
     overflow: hidden;
-  
-    & > #shift-modal-close-button {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        cursor: pointer;
-    }
+}
+
+#shift-modal-close-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+}
+
+#shift-modal-close-button:hover {
+    background-color: #f0f0f0;
 }
 
 #shift-modal-field-column {
     display: flex;
     flex-direction: column;
     flex: 1 1 0;
+    min-width: 0;
     min-height: 0;
+    overflow-y: auto
+}
 
-    & > #shift-modal-description {
-        max-height: 25%;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
+#shift-modal-field-column > h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+#shift-modal-field-column > p {
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+#shift-modal-description {
+    max-height: 30%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #shift-modal-people-column {
     display: flex;
     flex-direction: column;
-    flex: 1 1 0;
+    flex: 0 0 200px;
+    min-width: 200px;
     min-height: 0;
+    gap: 12px;
+}
 
-    & > #shift-modal-people-column-list-wrapper {
-        flex: 1 1 auto;
-        overflow-y: scroll;
-    }
+#shift-modal-people-column > h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
 
-    & > #shift-modal-people-column-list > #shift-modal-people-column-list-item {
-        list-style-type: none;
-    }
+#shift-modal-people-column-list-wrapper {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 8px 0;
+}
+
+#shift-modal-people-column-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.shift-modal-people-column-list-element {
+    padding: 8px 12px;
+}
+
+.shift-modal-people-column-list-element:hover {
+    background-color: #f5f5f5;
+}
+
+#shift-modal-unregistration-button, #shift-modal-registration-button {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 4px;
 }
 
 .hidden {

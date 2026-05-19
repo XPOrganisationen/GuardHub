@@ -10,7 +10,9 @@ const formMessage = document.getElementById("formMessage");
 
 const logoutButton = document.getElementById("logoutButton");
 
-import {BASE_API_URL, sendRequestTo} from "./util.js";
+import {BASE_API_URL, injectHeader, sendRequestTo} from "./util.js";
+
+injectHeader('Guard Management');
 
 await loadGuards();
 

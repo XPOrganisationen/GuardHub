@@ -33,8 +33,8 @@ public class ShiftRegistrationController {
     }
 
     @GetMapping("/guards/{shiftId}")
-    public List<String> getAllRegisteredGuardNamesForShift(@PathVariable Long shiftId) {
-        return shiftRegistrationService.findAcceptedGuardNamesByShiftId(shiftId);
+    public List<Guard> getAllRegisteredGuardNamesForShift(@PathVariable Long shiftId) {
+        return shiftRegistrationService.findAcceptedGuardsByShiftId(shiftId);
     }
 
     @GetMapping("/{shiftId}/has-registration/{guardId}")

@@ -39,12 +39,12 @@ async function buildPeopleColumn(shift) {
     let peopleList = document.createElement('ul');
     peopleList.id = 'shift-modal-people-column-list';
 
-    let guardNames = await fetchRegisteredGuardNamesForShift(shift);
+    let guards = await fetchRegisteredGuardNamesForShift(shift);
 
-    guardNames.forEach(registrant => {
+    guards.forEach(registrant => {
         let listEntry = document.createElement('li');
         listEntry.classList.add('shift-modal-people-column-list-element');
-        listEntry.textContent = registrant;
+        listEntry.textContent = registrant.name;
         listEntry.title = `Phone: ${registrant.phoneNumber}`;
         peopleList.appendChild(listEntry);
     });
@@ -105,7 +105,7 @@ function buildFieldColumn(shift) {
     let italicized = document.createElement('i');
     let startEndDate = document.createElement('p');
     startEndDate.id = 'shift-modal-date-field';
-    startEndDate.innerHTML = `<p><strong>When:</strong> ${shift.shiftStart} - ${shift.shiftEnd}</p>`;
+    startEndDate.innerHTML = `<p><strong>When:</strong> ${shift.shiftStart.replace('T', ' ')} - ${shift.shiftEnd.replace('T', ' ')}</p>`;
     italicized.appendChild(startEndDate);
 
     let small = document.createElement('small');

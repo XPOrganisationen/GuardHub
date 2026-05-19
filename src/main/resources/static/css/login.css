@@ -53,4 +53,6 @@ label {
     margin-top: 16px;
 }
 
-
+.logout-button {
+    visibility: hidden; /* Kind of dirty */
+}

@@ -8,6 +8,7 @@ import com.guardhub.shift.registration.ShiftRegistration;
 import com.guardhub.shift.registration.ShiftRegistrationRepository;
 import com.guardhub.shift.registration.ShiftRegistrationService;
 import com.guardhub.user.Guard;
+import com.guardhub.user.User;
 import com.guardhub.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,29 +39,29 @@ class ShiftRegistrationServiceTests {
     private ShiftRegistrationService service;
 
     @Test
-    void findAcceptedGuardNamesByShiftIdReturnsNamesFromRepository() {
+    void findAcceptedGuardsByShiftIdReturnsExpectedGuards() {
         Long shiftId = 123L;
-        List<String> expected = Arrays.asList("Alice", "Bob");
+        List<Guard> expectedGuards = List.of(new Guard("Alice", "1", "1", "1"), new Guard("Bob", "2", "2", "2"));
         when(shiftRepository.existsById(shiftId)).thenReturn(true);
-        when(shiftRegistrationRepository.findAcceptedGuardNamesByShiftId(shiftId)).thenReturn(expected);
+        when(shiftRegistrationRepository.findAcceptedGuardsByShiftId(shiftId)).thenReturn(expectedGuards);
 
-        List<String> actual = service.findAcceptedGuardNamesByShiftId(shiftId);
+        List<Guard> actual = service.findAcceptedGuardsByShiftId(shiftId);
 
-        assertEquals(expected, actual);
+        assertEquals(expectedGuards, actual);
 
-        verify(shiftRegistrationRepository, times(1)).findAcceptedGuardNamesByShiftId(shiftId);
+        verify(shiftRegistrationRepository, times(1)).findAcceptedGuardsByShiftId(shiftId);
         verify(shiftRepository, times(1)).existsById(shiftId);
         verifyNoMoreInteractions(shiftRegistrationRepository);
     }
 
     @Test
-    void findAcceptedGuardNamesByShiftIdThrowsOnNonExistentShiftId() {
+    void findAcceptedGuardsByShiftIdThrowsOnNonExistentShiftId() {
         Long shiftId = 123L;
 
         when(shiftRepository.existsById(shiftId)).thenReturn(false);
 
         EntityDoesNotExistException ex = assertThrows(EntityDoesNotExistException.class,
-                () -> service.findAcceptedGuardNamesByShiftId(shiftId));
+                () -> service.findAcceptedGuardsByShiftId(shiftId));
         assertTrue(ex.getMessage().contains("No shift with ID " + shiftId));
 
         verify(shiftRepository, times(1)).existsById(shiftId);
