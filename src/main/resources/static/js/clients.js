@@ -1,3 +1,5 @@
+import { injectHeader } from "./util.js";
+
 const clientTableBody = document.getElementById("clientsTableBody");
 const searchInput = document.getElementById("searchInput");
 const clientMessage = document.getElementById("clientMessage");
@@ -11,6 +13,7 @@ const formMessage = document.getElementById("formMessage");
 const logoutButton = document.getElementById("logoutButton");
 
 loadClients();
+injectHeader('Client Management')
 
 async function loadClients(){
     try {

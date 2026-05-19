@@ -16,8 +16,8 @@ public interface ShiftRegistrationRepository extends JpaRepository <ShiftRegistr
 
     List<ShiftRegistration> findByShiftAndRegistrationStatus(Shift shift, RegistrationStatus regStatus);
 
-    @Query("SELECT r.guard.name FROM ShiftRegistration r WHERE r.shift.shiftId = :shiftId AND r.registrationStatus = 'APPROVED'")
-    List<String> findAcceptedGuardNamesByShiftId(@Param("shiftId") Long shiftId);
+    @Query("SELECT r.guard FROM ShiftRegistration r WHERE r.shift.shiftId = :shiftId AND r.registrationStatus = 'APPROVED'")
+    List<Guard> findAcceptedGuardsByShiftId(@Param("shiftId") Long shiftId);
 
     @Query("SELECT COUNT(*) > 0 FROM ShiftRegistration r WHERE r.shift.shiftId = :shiftId AND r.guard.userId = :guardId AND r.registrationStatus NOT IN ('CANCELED', 'REJECTED')")
     Boolean guardHasRegistrationForShift(Long guardId, Long shiftId);

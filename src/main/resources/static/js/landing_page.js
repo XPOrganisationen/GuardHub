@@ -1,4 +1,4 @@
-import {BASE_API_URL, sendRequestTo, shiftDateToTimeString} from "./util.js";
+import {BASE_API_URL, sendRequestTo, shiftDateToTimeString, injectHeader} from "./util.js";
 import {buildModal, openShiftModal} from "./shift_modal.js";
 
 window.addEventListener('DOMContentLoaded', init);
@@ -27,6 +27,8 @@ async function init() {
     let goForwardOneWeekButton = document.getElementById('calendar-week-navigation-btn-right');
     goBackOneWeekButton.addEventListener('click', handleGoBackOneWeek);
     goForwardOneWeekButton.addEventListener('click', handleGoForwardOneWeek);
+
+    injectHeader('Shifts');
 
     await renderSchedule(await getShiftsForWeek('all', 0));
 }
@@ -160,11 +162,9 @@ async function buildShiftScheduleColumns(shifts, weekOffset) {
 function headerCellFromWeekdayString(weekdayString) {
     let cell = document.createElement('div');
     cell.classList.add('header-cell');
-    let b = document.createElement('strong');
-    let headerCell = document.createElement('p');
+    let headerCell = document.createElement('h3');
     headerCell.textContent = weekdayString;
-    b.appendChild(headerCell);
-    cell.appendChild(b);
+    cell.appendChild(headerCell);
     return cell;
 }
 
@@ -184,7 +184,8 @@ async function buildShiftCard(shift) {
     locationField.textContent = shift.location;
     italicized.appendChild(locationField);
 
-    let timeField = document.createElement('p');
+    let timeField = document.createElement('span');
+    timeField.classList.add('date');
     timeField.textContent = `${shiftDateToTimeString(new Date(shift.shiftStart))} / ${shiftDateToTimeString(new Date(shift.shiftEnd))}`;
 
     let small = document.createElement('small');

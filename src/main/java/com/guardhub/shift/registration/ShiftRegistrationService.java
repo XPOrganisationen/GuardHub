@@ -152,12 +152,12 @@ public class ShiftRegistrationService {
         return shiftRegistrationRepository.save(registration);
     }
 
-    public List<String> findAcceptedGuardNamesByShiftId(Long shiftId) {
+    public List<Guard> findAcceptedGuardsByShiftId(Long shiftId) {
         if (!shiftRepository.existsById(shiftId)) {
             throw new EntityDoesNotExistException("No shift with ID " + shiftId + " exists");
         }
 
-        return shiftRegistrationRepository.findAcceptedGuardNamesByShiftId(shiftId);
+        return shiftRegistrationRepository.findAcceptedGuardsByShiftId(shiftId);
     }
 
     public Boolean guardHasRegistrationForShift(Long guardId, Long shiftId) {

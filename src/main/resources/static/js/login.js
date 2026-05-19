@@ -1,7 +1,8 @@
-import {BASE_API_URL, sendRequestTo} from "./util.js";
+import {BASE_API_URL, injectHeader, sendRequestTo} from "./util.js";
 
 const loginForm = document.getElementById("loginForm");
 const errorMessage = document.getElementById("errorMessage");
+injectHeader('Security Login');
 
 loginForm.addEventListener("submit", async function (event)
 {
@@ -26,7 +27,7 @@ loginForm.addEventListener("submit", async function (event)
     if (user.userType === "ADMIN"){
         window.location.href="/administration.html";
     } else if (user.userType === "GUARD"){
-        window.location.href = "/shifts.html";
+        window.location.href = "/landing_page.html";
     }
     else {
         errorMessage.textContent = "Unknown usertype. Please contact support."; //Not sure what to write here; do we want to tell them it's a usertype problem?
