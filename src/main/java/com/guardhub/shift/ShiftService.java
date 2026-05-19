@@ -7,4 +7,7 @@ import java.util.Map;
 public interface ShiftService {
     Map<DayOfWeek, List<ShiftDTO>> findAllForWeek(Long weekOffset);
     Map<DayOfWeek, List<ShiftDTO>> findAllForGuardForWeek(Long guardId, Long weekOffset);
+    ShiftDTO createShift(CreateShiftRequest request);
+    ShiftDTO updateShift(Long shiftId, UpdateShiftRequest request);
+    void deleteShift(Long shiftId);
 }

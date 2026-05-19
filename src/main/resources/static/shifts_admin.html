@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardHub - Shifts</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/submenu.css">
+</head>
+
+<body class="submenu-page">
+
+<header class="topbar">
+    <div class="topbar-brand">
+        <img
+                src="images/GuardhubLogo.png"
+                alt="GuardHub logo"
+                class="topbar-logo">
+    </div>
+
+    <h1>Shift Management</h1>
+
+    <button id="logoutButton" class="logout-button">
+        Log out
+    </button>
+</header>
+
+<main class="submenu-main">
+
+    <section class="submenu-card">
+        <div class="submenu-header">
+            <div>
+                <h2>Shifts</h2>
+                <p>View, search and manage shifts</p>
+            </div>
+
+            <button id="openAddShiftButton" class="primary-button">
+                New shift
+            </button>
+        </div>
+
+        <div class="submenu-toolbar">
+            <label for="searchInput">Search</label>
+
+            <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by title..."
+            >
+        </div>
+
+        <table class="submenu-table">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Client</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Guards</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody id="shiftsTableBody">
+            </tbody>
+        </table>
+
+        <p id="shiftMessage" class="submenu-message"></p>
+    </section>
+</main>
+
+<section id="addShiftModal" class="modal hidden">
+    <div class="modal-card">
+        <h2>Shift Form</h2>
+        <form id="addShiftForm">
+
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input id="title" type="text" required>
+            </div>
+
+            <div class="form-group">
+                <label for="clientId">Client ID</label>
+                <input id="clientId" type="number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="shiftStart">Start date &amp; time</label>
+                <input id="shiftStart" type="datetime-local" required>
+            </div>
+
+            <div class="form-group">
+                <label for="shiftEnd">End date &amp; time</label>
+                <input id="shiftEnd" type="datetime-local" required>
+            </div>
+
+            <div class="form-group">
+                <label for="requiredGuards">Required guards</label>
+                <input id="requiredGuards" type="number" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="parkingInstructions">Parking instructions</label>
+                <input id="parkingInstructions" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="foodServed">
+                    <input id="foodServed" type="checkbox">
+                    Food served
+                </label>
+            </div>
+
+            <p id="formMessage" class="form-message"></p>
+
+            <div class="modal-actions">
+                <button type="button" id="cancelAddShiftButton" class="secondary-button">
+                    Cancel
+                </button>
+
+                <button type="submit" class="primary-button">
+                    Add Shift
+                </button>
+            </div>
+
+        </form>
+    </div>
+</section>
+
+<section id="editShiftModal" class="modal hidden">
+    <div class="modal-card">
+        <h2>Edit Shift</h2>
+        <form id="editShiftForm">
+
+            <div class="form-group">
+                <label for="editTitle">Title</label>
+                <input id="editTitle" type="text" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editShiftStart">Start date &amp; time</label>
+                <input id="editShiftStart" type="datetime-local" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editShiftEnd">End date &amp; time</label>
+                <input id="editShiftEnd" type="datetime-local" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editRequiredGuards">Required guards</label>
+                <input id="editRequiredGuards" type="number" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="editDescription">Description</label>
+                <textarea id="editDescription" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="editParkingInstructions">Parking instructions</label>
+                <input id="editParkingInstructions" type="text">
+            </div>
+
+            <div class="form-group">
+                <label for="editFoodServed">
+                    <input id="editFoodServed" type="checkbox">
+                    Food served
+                </label>
+            </div>
+
+            <p id="editFormMessage" class="form-message"></p>
+
+            <div class="modal-actions">
+                <button type="button" id="cancelEditShiftButton" class="secondary-button">
+                    Cancel
+                </button>
+                <button type="submit" class="primary-button">
+                    Save Changes
+                </button>
+            </div>
+
+        </form>
+    </div>
+</section>
+
+<script src="js/shifts_admin.js" type="module"></script>
+</body>
+</html>
