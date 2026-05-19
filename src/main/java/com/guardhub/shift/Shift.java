@@ -34,7 +34,6 @@ public class Shift {
     @NotNull
     @Column(nullable = false)
     private LocalDateTime shiftEnd;
-    //    private List<Certificate> requiredCertificates;
 
     @NotNull
     @Column(name = "required_guards")
@@ -103,18 +102,6 @@ public class Shift {
         this.requiredGuardAmount = requiredGuardAmount;
     }
 
-//    public List<Certificate> getRequiredCertificates() {
-//        return requiredCertificates;
-//    }
-
-//    public void addRequiredCertificate(Certificate certificate) {
-//        requiredCertificates.add(certificate);
-//    }
-
-//    public boolean hasAnyRequiredCertificates() {
-//        return !requiredCertificates.isEmpty();
-//    }
-
     public List<ShiftRegistration> getRegistrations() {
         return shiftRegistrations;
     }
@@ -138,7 +125,6 @@ public class Shift {
 
 //    public boolean canAssignGuard(Guard guard) {
 //        if (shiftStatus != ShiftStatus.AVAILABLE) return false;
-//        if (!guard.hasCertificates(requiredCertificates)) return false;
 //        return true;
 //    }
 
