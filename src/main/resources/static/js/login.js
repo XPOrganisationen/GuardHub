@@ -1,4 +1,4 @@
-import {BASE_API_URL, sendRequestTo} from "../util.js";
+import {BASE_API_URL, sendRequestTo} from "./util.js";
 
 const loginForm = document.getElementById("loginForm");
 const errorMessage = document.getElementById("errorMessage");
