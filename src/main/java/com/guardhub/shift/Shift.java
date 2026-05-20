@@ -1,6 +1,8 @@
 package com.guardhub.shift;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.guardhub.client.Client;
 import com.guardhub.shift.registration.ShiftRegistration;
 import jakarta.persistence.*;
@@ -45,7 +47,7 @@ public class Shift {
     private String description;
 
     @OneToMany(mappedBy = "shift", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "shiftId")
     private List<ShiftRegistration> shiftRegistrations = new ArrayList<>();
 
     private boolean foodServed;
