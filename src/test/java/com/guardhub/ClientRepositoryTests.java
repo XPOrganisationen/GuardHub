@@ -1,48 +1,59 @@
 package com.guardhub;
 
-import com.guardhub.city.City;
 import com.guardhub.city.CityRepository;
+import com.guardhub.city.City;
 import com.guardhub.client.Client;
 import com.guardhub.client.ClientRepository;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 public class ClientRepositoryTests {
 
     @Autowired
     private ClientRepository clientRepository;
-
     @Autowired
     private CityRepository cityRepository;
 
-    @BeforeEach
-    public void setUp() {
-        City city1 = new City("Copenhagen");
-        City city2 = new City("Odense");
-        City city3 = new City("Esbjerg");
-        cityRepository.save(city1);
-        cityRepository.save(city2);
-        cityRepository.save(city3);
+    @Test
+    public void findAllClientsReturnsClients() {
+        City city = new City("Copenhagen");
 
-        Client client1 = new Client("ExampleRoad1, ExampleCity1, ExampleCountry1", city1, "a1@example.com", null, "ExampleCompany1", "12345678");
-        Client client2 = new Client("ExampleRoad2, ExampleCity2, ExampleCountry2", city2, "a2@example.com", null, "ExampleCompany2", "22345678");
-        Client client3 = new Client("ExampleRoad3, ExampleCity3, ExampleCountry3", city3, "a3@example.com", null, "ExampleCompany3", "32345678");
-        clientRepository.save(client1);
-        clientRepository.save(client2);
-        clientRepository.save(client3);
+        cityRepository.save(city);
+
+        Client client = new Client("example-street 24", city, "example@example.com", null, "Example Example", "12131415");
+
+        clientRepository.save(client);
+
+        List<Client> clients = clientRepository.findAll();
+
+        Assertions.assertEquals(1, clients.size());
+        Assertions.assertEquals("Example Example", clients.getFirst().getName());
     }
 
     @Test
-    public void findAllFindsAllClients() {
-        List<Client> clients = clientRepository.findAll();
+    public void findAllByNameContainingIgnoreCaseFindsMatchingUsers() {
+        City city1 = new City("Copenhagen");
+        City city2 = new City("Odense");
+        City city3 = new City("Esbjerg");
 
-        Assertions.assertEquals(3, clients.size());
+        cityRepository.saveAll(List.of(city1, city2, city3));
+
+        Client client1 = new Client("example-street 24", city1, "example1@example.com", null, "Example Example", "12131415");
+        Client client2 = new Client("example-street 25", city2, "example2@example.com", null, "Example Example", "12131416");
+        Client client3 = new Client("example-street 26", city3, "example3@example.com", null, "Exception Exception3", "12131417");
+
+        clientRepository.saveAll(List.of(client1, client2, client3));
+
+
+        List<Client> result = clientRepository.findAllByNameContainingIgnoreCase("Example");
+
+        Assertions.assertEquals(2, result.size());
+        Assertions.assertTrue(result.stream().allMatch(user -> user.getName().equals("Example Example")));
     }
-
 }
