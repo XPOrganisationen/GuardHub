@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardHub - Registrations</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/submenu.css">
+</head>
+
+<body class="submenu-page">
+
+<header class="topbar">
+    <div class="topbar-brand">
+        <img
+                src="images/GuardhubLogo.png"
+                alt="GuardHub logo"
+                class="topbar-logo">
+    </div>
+
+    <h1>Admin registrations</h1>
+
+    <button id="logoutButton" class="logout-button">
+        Log out
+    </button>
+</header>
+
+<main class="submenu-main">
+
+    <section class="submenu-card">
+        <div class="submenu-header">
+            <div>
+                <h2>Registrations</h2>
+                <p>View and approve registrations</p>
+            </div>
+
+        </div>
+
+        <table class="submenu-table">
+            <thead>
+            <tr>
+                <th>Date-of-shift</th>
+                <th>Client</th>
+                <th>Guard</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody id="registrationsTableBody">
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<script src="js/registrations.js" type="module"></script>
+</body>
+</html>

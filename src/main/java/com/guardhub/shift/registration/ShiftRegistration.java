@@ -1,6 +1,8 @@
 package com.guardhub.shift.registration;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.guardhub.shift.Shift;
 import com.guardhub.user.Guard;
 import jakarta.persistence.*;
@@ -18,7 +20,7 @@ public class ShiftRegistration {
     private Guard guard;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JsonBackReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "shiftId")
     @JoinColumn(name = "shift_id")
     private Shift shift;
 

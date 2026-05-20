@@ -6,6 +6,7 @@ import com.guardhub.user.Guard;
 import com.guardhub.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.util.List;
@@ -17,6 +18,7 @@ public class ShiftRegistrationController {
     private final ShiftRegistrationService shiftRegistrationService;
     private final UserService userService;
 
+
     public ShiftRegistrationController(ShiftRegistrationService shiftRegistrationService, UserService userService) {
         this.shiftRegistrationService = shiftRegistrationService;
         this.userService = userService;
@@ -25,6 +27,13 @@ public class ShiftRegistrationController {
     @GetMapping
     public List<ShiftRegistration> getAllRegistrations() {
         return shiftRegistrationService.findAllRegistrations();
+    }
+
+    @GetMapping("/registration-status/{status}")
+    public List<ShiftRegistrationDTO> getRegistrationsByStatus(@PathVariable RegistrationStatus status) {
+        return shiftRegistrationService.findByRegistrationStatus(status).stream()
+                .map(ShiftRegistrationDTO::from)
+                .toList();
     }
 
     @GetMapping("/{registrationId}")
