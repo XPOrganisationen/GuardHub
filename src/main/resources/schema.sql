@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS clients (
     phone_number TEXT NOT NULL,
     city VARCHAR(128),
     address TEXT NOT NULL,
-    FOREIGN KEY (city) REFERENCES cities(city_name)
+    FOREIGN KEY (city) REFERENCES cities(city_name) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS shifts (

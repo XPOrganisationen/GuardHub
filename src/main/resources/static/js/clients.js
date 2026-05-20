@@ -12,72 +12,73 @@ const formMessage = document.getElementById("formMessage");
 
 const logoutButton = document.getElementById("logoutButton");
 
-loadClients();
+import {BASE_API_URL, sendRequestTo} from "../js/util.js";
+
+await loadClients();
 injectHeader('Client Management')
 
 async function loadClients(){
-    try {
-        const response = await fetch("api/clients")
-
-        if (!response.ok){
-            throw new Error("Could not load clients");
-        }
-
-        const clients = await response.json();
-
-        renderClients(clients);
-    }
-    catch (error){
-        clientMessage.textContent = "Could not load clients";
-    }
+    let clients = await sendRequestTo(BASE_API_URL + "clients");
+    await renderClients(clients);
 }
 
-function renderClients(clients) {
+async function renderClients(clients) {
     clientTableBody.innerHTML = "";
 
-    clients.forEach(function (client) {
-        const row = document.createElement("tr");
-
-        const city = JSON.stringify(client.city)
-
-        row.innerHTML = `
-        <td>${client.name}</td>
-        <td>${client.email}</td>
-        <td>${client.phoneNumber}</td>
-        <td>${city}</td>
-        <td>${client.address}</td>
-        <td>
-            <button class="delete-button" onclick="deleteClient(${client.id})">
-            Delete
-            </button> 
-        </td>
-        `
-
-        clientTableBody.appendChild(row);
-    });
+    clients.forEach(client => clientTableBody.appendChild(buildClientRow(client)))
 }
+
+function buildClientRow(client) {
+    let row = document.createElement('tr');
+    row.setAttribute('data-client-id', client.id);
+    let nameCell = document.createElement('td');
+    nameCell.textContent = client.name;
+    let emailCell = document.createElement('td');
+    emailCell.textContent = client.email;
+    let phoneCell = document.createElement('td');
+    phoneCell.textContent = client.phoneNumber;
+    let cityCell = document.createElement('td');
+    cityCell.textContent = client.city.cityName;
+    let addressCell = document.createElement('td');
+    addressCell.textContent = client.address;
+    let deleteButton = document.createElement('button');
+    deleteButton.classList.add('delete-button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener('click', deleteClient);
+
+    row.appendChild(nameCell);
+    row.appendChild(emailCell);
+    row.appendChild(phoneCell);
+    row.appendChild(cityCell);
+    row.appendChild(addressCell);
+    row.appendChild(deleteButton);
+
+    return row;
+}
+
+
 searchInput.addEventListener("input", async function(){
     const searchText = searchInput.value.trim();
 
     if (searchText === ""){
-        loadClients();
+        await loadClients();
         return;
     }
 
     try {
-        const response = await fetch(`/api/clients/${searchText}`);
+        const response = await fetch(`/api/clients/by-name/${searchText}`);
 
         if (!response.ok){
-            throw new Error("No client matching the searched name or city");
+            throw new Error("No client matching the searched name");
         }
 
         const clients = await response.json();
 
-        renderClients(clients);
+        await renderClients(clients);
     }
 
     catch (error){
-        userMessage.textContent = "No client matching the searched name or city"
+        clientMessage.textContent = "No client matching the searched name"
     }
 });
 
@@ -100,56 +101,39 @@ addClientForm.addEventListener("submit", async function (event){
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
         phoneNumber: document.getElementById("phoneNumber").value,
-        city: document.getElementById("city").value,
+        city: {cityName: document.getElementById("city").value} ,
         address: document.getElementById("address").value
     };
 
-    try {
-        const response = await fetch("api/clients/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newClient)
-        });
+    await sendRequestTo(BASE_API_URL + "cities", {
+        method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(newClient.city)
+    });
 
-        if (!response.ok){
-            throw new Error("Could not add client");
-        }
+    await sendRequestTo(BASE_API_URL + "clients", {
+        method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(newClient)
+    });
 
-        addClientModal.classList.add("hidden");
-        addClientForm.reset();
+    addClientModal.classList.add("hidden");
+    addClientForm.reset();
 
-        loadClients();
-    }
-
-    catch (error){
-        formMessage.textContent = "Could not add client";
-    }
+    await loadClients();
 });
 
-async function deleteClient(id){
+async function deleteClient(e){
     const confirmed = confirm("Are you sure you want to delete this client?");
 
     if (!confirmed){
         return;
     }
 
-    try{
-        const response = await fetch(`/api/clients/${id}`, {
-            method: "DELETE"
-        });
+    let closestRow = e.target.closest('tr');
+    let closestRowId = Number.parseInt(closestRow.getAttribute('data-client-id'));
 
-        if (!response.ok){
-            throw new Error("Could not delete client");
-        }
+    await sendRequestTo(BASE_API_URL + `clients/${closestRowId}`, {
+        method: "DELETE"
+    });
 
-        loadClients();
-    }
-
-    catch(error){
-        clientMessage.textContent = "Could not delete client";
-    }
+    await loadClients();
 }
 
 logoutButton.addEventListener("click", function()
